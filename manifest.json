@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "Chrome Password Locker",
+  "version": "1.4",
+  "description": "Khoá Chrome!! by qckhanh205@gmail.com",
+  "permissions": ["storage", "tabs", "scripting", "webNavigation"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "options_page": "options.html",
+  "host_permissions": ["<all_urls>"],
+  "web_accessible_resources": [
+    {
+      "resources": ["background.png", "background_option.png"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

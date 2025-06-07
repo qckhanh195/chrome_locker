@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Khoá Chrome</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-image: url('background.png');
+      background-size: cover;
+      background-position: center;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .overlay {
+      background: rgba(0, 0, 0, 0.7);
+      padding: 40px;
+      border-radius: 15px;
+      text-align: center;
+      color: white;
+      width: 300px;
+    }
+
+    input, button {
+      padding: 12px;
+      width: 100%;
+      margin-top: 15px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: none;
+    }
+
+    input {
+      background-color: white;
+      width: 275px;
+    }
+
+    button {
+      background-color: #28a745;
+      color: white;
+    }
+
+    #cancelBtn {
+      background-color: #dc3545;
+    }
+
+    #error {
+      color: red;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay">
+    <h2>🔒 Nhập mật khẩu</h2>
+    <input type="password" id="password" placeholder="Mật khẩu..." autofocus />
+    <button id="okBtn">OK</button>
+    <button id="cancelBtn">Cancel</button>
+    <div id="error"></div>
+  </div>
+
+  <script src="lockscreen.js"></script>
+</body>
+</html>

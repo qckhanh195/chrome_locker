@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Thay đổi mật khẩu</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      padding: 40px;
+      background-image: url('background_option.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      color: #fff;
+    }
+
+    .container {
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 30px;
+      border-radius: 12px;
+      max-width: 400px;
+      margin: auto;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .password-wrapper {
+      position: relative;
+      width: 100%;
+      margin-bottom: 15px;
+    }
+
+    .password-wrapper input {
+      width: 100%;
+      padding: 10px;
+      padding-right: 35px; /* chừa chỗ cho icon */
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      box-sizing: border-box;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      user-select: none;
+      font-size: 18px;
+      color: #888;
+      transition: color 0.3s;
+    }
+
+    .toggle-password:hover {
+      color: #fff;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    #status {
+      margin-top: 15px;
+      color: lightgreen;
+      text-align: center;
+    }
+
+    #error {
+      color: red;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h2>Thay đổi mật khẩu</h2>
+
+    <div class="password-wrapper">
+      <input type="password" id="oldPassword" placeholder="Mật khẩu cũ" autocomplete="off" />
+      <span class="toggle-password" data-target="oldPassword">👁️</span>
+    </div>
+
+    <div class="password-wrapper">
+      <input type="password" id="newPassword" placeholder="Mật khẩu mới" autocomplete="off" />
+      <span class="toggle-password" data-target="newPassword">👁️</span>
+    </div>
+
+    <div class="password-wrapper">
+      <input type="password" id="confirmPassword" placeholder="Nhập lại mật khẩu mới" autocomplete="off" />
+      <span class="toggle-password" data-target="confirmPassword">👁️</span>
+    </div>
+
+    <button id="saveBtn">Lưu</button>
+    <div id="error"></div>
+    <div id="status"></div>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+
+</html>
