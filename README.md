@@ -1,4 +1,4 @@
--Mật khẩu mặc định là: 123456
+-Mật khẩu mặc định: 123456
 
 -Có thể thay đổi mật khẩu ở phần options, bằng cách vào phần tuỳ chọn của extensions hoặc truy cập link: chrome-extension://begleboadobhkomdfecmhodocihkcokm/options.html
 
@@ -6,7 +6,7 @@
 
 --------------------------------------------------------------------------------------------------
 
--The default password is: 123456
+-The default password: 123456
 
 -You can change the password in the Options section by going to the extension's options or by visiting the link: chrome-extension://begleboadobhkomdfecmhodocihkcokm/options.html
 
