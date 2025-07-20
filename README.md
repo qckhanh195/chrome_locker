@@ -1,6 +1,6 @@
 # Note
 
-**The default password:** 123456
+**The default password:** `123456`
 
 ## Features
 
