@@ -3,7 +3,7 @@
 
 
 # Start screen
-![Start screen](https://i.postimg.cc/gkgNt29m/Screenshot-2025-07-20-104625.png)
+<img src="https://i.postimg.cc/gkgNt29m/Screenshot-2025-07-20-104625.png" alt="Start screen" width="600"/>
 
 `The start screen that appears every time the browser is launched.`
 
