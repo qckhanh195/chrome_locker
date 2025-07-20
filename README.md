@@ -4,15 +4,15 @@
 
 ## Features
 
-- Add a security layer to your browser
+- Add a security layer to your browser.
 
-- Lock the browser on every new login
+- Lock the browser on every new login.
 
-- Prevent unwanted access
+- Prevent unwanted access.
 
-- Quick login
+- Quick login.
 
-- Simple and user-friendly interface
+- Simple and user-friendly interface.
 
 ## Start screen
 
@@ -34,5 +34,6 @@
 
 <img src="https://i.postimg.cc/vHY0v6N0/Screenshot-2025-07-20-104726.png" alt="Start screen" width="600"/>
 
+`When the password is changed, the browser will automatically log out.`
 
 
