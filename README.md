@@ -1,8 +1,16 @@
-Hi :D 
+# Features
+---
+ - **The default password:** 123456
 
------------------------------------------------
 
- - The default password: 123456
+# Start screen
+---
+<img src="https://streamable.com/o49twc">
+ - *The start screen that appears every time the browser is launched.*
 
- - You can change the password in the Options section by going to the extension's options.
+
+# Options screen
+---
+![Demo animation](https://streamable.com/gc26ry)
+<img src="https://streamable.com/wj7sx4">
 
