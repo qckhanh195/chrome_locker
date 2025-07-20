@@ -1,11 +1,11 @@
 # Features
- - **The default password:** 123456
+**The default password:** 123456
 
 
 # Start screen
 <img src="https://streamable.com/o49twc">
 
- - `The start screen that appears every time the browser is launched.`
+`The start screen that appears every time the browser is launched.`
 
 
 # Options screen
