@@ -4,7 +4,7 @@
 
 # Start screen
 <img src="https://streamable.com/o49twc">
- - *The start screen that appears every time the browser is launched.*
+ - `The start screen that appears every time the browser is launched.`
 
 
 # Options screen
