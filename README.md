@@ -1,14 +1,26 @@
-# Features
+# Note
 
 **The default password:** 123456
 
-# Start screen
+## Features
+
+- Add a security layer to your browser
+
+- Lock the browser on every new login
+
+- Prevent unwanted access
+
+- Quick login
+
+- Simple and user-friendly interface
+
+## Start screen
 
 <img src="https://i.postimg.cc/gkgNt29m/Screenshot-2025-07-20-104625.png" alt="Start screen" width="600"/>
 
 `The start screen that appears every time the browser is launched.`
 
-# Options screen
+## Options
 
 `How to access the extension's Options page.`
 
