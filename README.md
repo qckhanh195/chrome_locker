@@ -51,11 +51,10 @@
 - Extensions can still be easily removed via settings or the extensions bar :DDDD
 
 <p align="center">
-  <img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExenFodDQzYndiamR0Ym1ueXdiZ3M4czNrdHIwZjRzM2EzankwYWN5biZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Bjh3pSRGX9rOg/giphy.gif" alt="GIF demo">
+  <strong>&gt; My skills are limited, please bear with me :))</strong>
 </p>
 
 <p align="center">
-  <strong>My skills are limited, please bear with me :))</strong><br>
   <img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExenFodDQzYndiamR0Ym1ueXdiZ3M4czNrdHIwZjRzM2EzankwYWN5biZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Bjh3pSRGX9rOg/giphy.gif" alt="GIF demo">
 </p>
 
