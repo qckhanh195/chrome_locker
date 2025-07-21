@@ -14,6 +14,10 @@
 
 - Simple and user-friendly interface.
 
+- Cannot open new tabs when locked
+  
+- Cannot access domains other than `chrome://*`
+
 ## Start screen
 
 <img src="https://i.postimg.cc/gkgNt29m/Screenshot-2025-07-20-104625.png" alt="Start screen" width="600"/>
@@ -36,4 +40,16 @@
 
 `When the password is changed, the browser will automatically log out.`
 
+##Limitations
 
+**Lock screen:**
+
+- Still allows access to `chrome://*` domains ( chrome://chrome-urls/ )
+
+- Chrome right-click features are still usable
+
+- Extensions can still be easily removed via settings or the extensions bar :)))))))))))))
+
+**Password:**
+
+- No "forgot password" feature yet
