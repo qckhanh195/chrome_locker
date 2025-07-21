@@ -68,6 +68,6 @@
 
 ---
 
-> Thank you for your interest and support.
+> 😄 Thank you for your interest and support. 💖
 
-> This extension was created with the help of ChatGPT :D
+> ✨ This extension was created with the help of ChatGPT :D 🤖 
