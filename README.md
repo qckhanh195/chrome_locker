@@ -4,7 +4,7 @@
 
 **2. Remember to read the entire README.md**
 
-## Features
+<h2 align="center">Features</h2>
 
 - Add a security layer to your browser.
 
