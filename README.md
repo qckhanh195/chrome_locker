@@ -51,6 +51,7 @@
 - Chrome right-click features are still usable
 
 - Extensions can still be easily removed via settings or the extensions bar :DDDD
+  
 
 <p align="center">
   <img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExenFodDQzYndiamR0Ym1ueXdiZ3M4czNrdHIwZjRzM2EzankwYWN5biZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Bjh3pSRGX9rOg/giphy.gif" alt="GIF demo">
@@ -59,6 +60,7 @@
 <p align="center">
   <strong> - My skills are limited, please bear with me :)) - </strong>
 </p>
+
 
 > These limitations are partly due to changes from Manifest V2 to V3, so I haven't been able to fully resolve them yet :v
 
