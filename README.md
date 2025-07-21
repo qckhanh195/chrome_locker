@@ -55,7 +55,7 @@
 </p>
 
 <p align="center">
-  <strong>&gt; My skills are limited, please bear with me :))</strong>
+  <strong> My skills are limited, please bear with me :))</strong>
 </p>
 
 **Password:**
