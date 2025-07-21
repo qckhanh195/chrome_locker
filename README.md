@@ -60,6 +60,12 @@
   <strong> - My skills are limited, please bear with me :)) - </strong>
 </p>
 
+> These limitations are partly due to changes from Manifest V2 to V3, so I haven't been able to fully resolve them yet :v
+
 **Password:**
 
 - No "forgot password" feature yet
+
+---
+
+# This extension was developed with the help of ChatGPT :D
