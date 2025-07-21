@@ -48,7 +48,11 @@
 
 - Chrome right-click features are still usable
 
-- Extensions can still be easily removed via settings or the extensions bar :)))))))))))))
+- Extensions can still be easily removed via settings or the extensions bar :DDDD
+
+![GIF demo](https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExenFodDQzYndiamR0Ym1ueXdiZ3M4czNrdHIwZjRzM2EzankwYWN5biZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Bjh3pSRGX9rOg/giphy.gif)
+
+> My skills are limited, please bear with me :))
 
 **Password:**
 
