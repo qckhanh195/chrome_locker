@@ -1,6 +1,7 @@
 # Note
 
 **The default password:** `123456`
+**Remember to read the entire README.md**
 
 ## Features
 
@@ -55,7 +56,7 @@
 </p>
 
 <p align="center">
-  <strong> My skills are limited, please bear with me :))</strong>
+  <strong> - My skills are limited, please bear with me :)) - </strong>
 </p>
 
 **Password:**
