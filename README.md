@@ -67,5 +67,5 @@
 - No "forgot password" feature yet
 
 ---
-
-# This extension was developed with the help of ChatGPT :D
+> Thank you for your interest and support.
+> This extension was created with the help of ChatGPT :D
