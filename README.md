@@ -44,7 +44,7 @@
 
 **Lock screen:**
 
-- Still allows access to `chrome://*` domains ( (chrome://chrome-urls/) )
+- Still allows access to `chrome://*` domains ( chrome://chrome-urls/ )
 
 - Chrome right-click features are still usable
 
