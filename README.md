@@ -1,4 +1,4 @@
-# Note
+<h1 align="center">Note</h1>
 
 **1. The default password:** `123456`
 
