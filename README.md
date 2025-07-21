@@ -1,10 +1,10 @@
-<h1 align="center">Note</h1>
+## NOTE
 
 **1. The default password:** `123456`
 
 **2. Remember to read the entire README.md**
 
-<h2 align="center">Features</h2>
+## Features
 
 - Add a security layer to your browser.
 
