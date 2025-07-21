@@ -1,6 +1,7 @@
 # Note
 
 **The default password:** `123456`
+
 **Remember to read the entire README.md**
 
 ## Features
