@@ -2,7 +2,7 @@
 
 **1. The default password:** `123456`
 
-**2. Remember to read the entire README.md**
+**2. Please make sure to read the entire contents of the README.md file — the most important part is the [Limitations](limitations) section :DD**
 
 ## Features
 
@@ -40,6 +40,7 @@ When the browser is locked, users are completely restricted from opening new tab
 
 `When the password is changed, the browser will automatically log out.`
 
+<a name="limitations"></a>
 ## Limitations
 
 **Lock screen:**
