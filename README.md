@@ -67,7 +67,8 @@ When the browser is locked, users are completely restricted from opening new tab
 
 - No "forgot password" feature yet
 
-- **There may also be some other limitations, but we haven’t discovered them yet :DD**
+
+**There may also be some other limitations, but we haven’t discovered them yet :DD**
 ---
 
 > 😄 Thank you for your interest and support. 💖
