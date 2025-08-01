@@ -6,19 +6,17 @@
 
 ## Features
 
-- Add a security layer to your browser.
+- **Add a powerful security layer to your browser.**
+Enhance your browser’s protection with an extra shield that keeps your data safe from unauthorized access. The browser is automatically locked on every new login, ensuring that only you — or someone with the correct password — can use it.
 
-- Lock the browser on every new login.
+- **Prevent unwanted access at all times.**
+When the browser is locked, users are completely restricted from opening new tabs or accessing any websites except internal pages like `chrome://`. This creates a secure environment that blocks prying eyes and potential misuse right from the start.
 
-- Prevent unwanted access.
+- **Enjoy quick and seamless login** — just enter your password and you're instantly back to browsing. It’s designed to be fast, responsive, and effortless.
 
-- Quick login.
+- **The interface is simple, clean, and user-friendly**, built with ease of use in mind. No complex settings or confusing menus — just install it once, and your browser is protected every time it starts.
 
-- Simple and user-friendly interface.
 
-- Cannot open new tabs when locked
-  
-- Cannot access domains other than `chrome://*`
 
 ## Start screen
 
