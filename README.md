@@ -24,11 +24,11 @@ When the browser is locked, users are completely restricted from opening new tab
 
 `The start screen that appears every time the browser is launched.`
 
+<a name="options"></a>
 ## Options
 
 `You can change the password in the Options page. It is recommended to replace the default password with your own as soon as you install the extension.`
 
-<a name="options"></a>
 *How to access the extension's Options page.*
 
 ![GIF demo](https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExOTlqcDI0b2JsdmxnMDlkbWM4ZTdxeTBia3NtNzB0cHpienloM2hqMiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/pUjCCfM9u3wtWl7a7J/giphy.gif)
