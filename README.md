@@ -2,7 +2,7 @@
 
 **1. The default password:** `123456`
 
-**2. Please make sure to read the entire contents of the README.md file — the most important part is the [Limitations](limitations) section :DD**
+**2. Please make sure to read the entire contents of the README.md file — the most important part is the [Limitations](#limitations) section :DD**
 
 ## Features
 
@@ -67,6 +67,7 @@ When the browser is locked, users are completely restricted from opening new tab
 
 - No "forgot password" feature yet
 
+- **There may also be some other limitations, but we haven’t discovered them yet :DD**
 ---
 
 > 😄 Thank you for your interest and support. 💖
