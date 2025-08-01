@@ -27,7 +27,7 @@ When the browser is locked, users are completely restricted from opening new tab
 <a name="options"></a>
 ## Options
 
-`You can change the password in the Options page. It is recommended to replace the default password with your own as soon as you install the extension.`
+You can change the password in the Options page. It is recommended to replace the default password with your own as soon as you install the extension.
 
 *How to access the extension's Options page.*
 
