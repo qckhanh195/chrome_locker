@@ -1,8 +1,8 @@
 ## NOTE
 
-**1. The default password:** `123456`
+**1. The default password:** `123456` . How to access the extension's Options page — [change password](#options).
 
-**2. Please make sure to read the entire contents of the README.md file — the most important part is the [Limitations](#limitations) section :DD**
+**2. Please make sure to read the entire contents of the README.md file — the most important part is the [Limitations](#limitations) section. :DD**
 
 ## Features
 
@@ -28,6 +28,7 @@ When the browser is locked, users are completely restricted from opening new tab
 
 `You can change the password in the Options page. It is recommended to replace the default password with your own as soon as you install the extension.`
 
+<a name="options"></a>
 *How to access the extension's Options page.*
 
 ![GIF demo](https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExOTlqcDI0b2JsdmxnMDlkbWM4ZTdxeTBia3NtNzB0cHpienloM2hqMiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/pUjCCfM9u3wtWl7a7J/giphy.gif)
@@ -69,6 +70,7 @@ When the browser is locked, users are completely restricted from opening new tab
 
 
 **There may also be some other limitations, but we haven’t discovered them yet :DD**
+
 ---
 
 > 😄 Thank you for your interest and support. 💖
