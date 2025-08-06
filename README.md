@@ -62,7 +62,7 @@ You can change the password in the Options page. It is recommended to replace th
 </p>
 
 
-> These limitations are partly due to changes from Manifest V2 to V3, so I haven't been able to fully resolve them yet :v
+> These limitations are partly due to changes from Manifest V2 to V3, so I haven't been able to fully resolve them yet (I guess so, but if it's wrong, don’t ask me 😬) :v
 
 **Password:**
 
