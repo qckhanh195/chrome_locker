@@ -28,21 +28,27 @@ Browser Locker is a simple Chrome Extension designed to protect your privacy by 
 ## 📁 File Structure
 
 ```
-browser-locker/
-├── manifest.json          # Extension configuration
-├── popup.html             # Main popup interface
-├── popup.js               # Popup logic and functionality
-├── background.js          # Service worker script
-├── content.js             # Content script (if needed)
-├── lockscreen.html        # Lock screen interface
-├── lockscreen.js          # Lock screen functionality
-├── options.html           # Extension options page
-├── options.js             # Options page functionality
-├── icons/                 # Icon directory
-│   ├── icon16.png
-│   ├── icon48.png
-│   └── icon128.png
-└── README.md              # This file
+chrome-lock-extension/
+├── manifest.json
+├── popup.html
+├── lockscreen.html
+├── options.html
+├── assets/
+│   ├── css/
+│   │   ├── popup.css 
+│   │   ├── lockscreen.css
+│   │   └── options.css
+│   ├── js/
+│   │   ├── popup.js
+│   │   ├── lockscreen.js
+│   │   ├── options.js
+│   │   ├── background.js
+│   │   └── content.js
+│   └── icons/
+│       ├── icon16.png
+│       ├── icon48.png
+│       └── icon128.png
+└── README.md
 ```
 
 ## ⚙️ Configuration
@@ -151,10 +157,6 @@ Modify `popup.js` to:
 - **tabs**: Manage browser tabs (if needed)  
 - **activeTab**: Access current tab information  
 
-## 📄 License
-
-MIT License - See LICENSE file for details  
-
 ## 🤝 Contributing
 
 All contributions are welcome!
@@ -176,26 +178,6 @@ All contributions are welcome!
 
 - **Issues**: [GitHub Issues](https://github.com/qckhanh195)  
 - **Website**: [https://qckhanh.id.vn/](https://qckhanh.id.vn/)  
-
-## 🔄 Changelog
-
-### v1.0.0 (2024-09-23)
-
-  ✨ Initial release with basic password protection  
-  🎨 Modern popup interface with particle animations  
-  🔐 Basic security features (shortcut blocking, right-click protection)  
-  📊 Failed attempt counter (display only, no lockout)  
-  ⚡ Auto-focus password input field  
-  🛠️ Options page for password management  
-  📱 Lock screen functionality  
-
-### Planned Features
-
-  🔄 Automatic session timeout  
-  🎨 Multiple theme options  
-  🔐 Enhanced encryption methods  
-  📊 Usage statistics  
-  🌐 Multi-language support  
 
 ## 📚 Technical Details
 
