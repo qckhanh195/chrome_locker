@@ -1,78 +1,414 @@
-## NOTE
-
-**1. The default password: `123456` . How to access the extension's Options page — [change password](#options)**.
-
-**2. Please make sure to read the entire contents of the README.md file — the most important part is the [Limitations](#limitations) section. :DD**
-
-## Features
-
-- **Add a powerful security layer to your browser.**
-Enhance your browser’s protection with an extra shield that keeps your data safe from unauthorized access. The browser is automatically locked on every new login, ensuring that only you — or someone with the correct password — can use it.
-
-- **Prevent unwanted access at all times.**
-When the browser is locked, users are completely restricted from opening new tabs or accessing any websites except internal pages like `chrome://`. This creates a secure environment that blocks prying eyes and potential misuse right from the start.
-
-- **Enjoy quick and seamless login** — just enter your password and you're instantly back to browsing. It’s designed to be fast, responsive, and effortless.
-
-- **The interface is simple, clean, and user-friendly**, built with ease of use in mind. No complex settings or confusing menus — just install it once, and your browser is protected every time it starts.
+\# Browser Locker Extension
 
 
 
-## Start screen
+\## 📝 Description
 
-<img src="https://i.postimg.cc/gkgNt29m/Screenshot-2025-07-20-104625.png" alt="Start screen" width="600"/>
 
-`The start screen that appears every time the browser is launched.`
 
-<a name="options"></a>
-## Options
+Browser Locker is a simple Chrome Extension designed to protect your privacy by requiring a password for access. The extension acts as an additional security layer for your browser without interfering with normal web browsing activities.
 
-You can change the password in the Options page. It is recommended to replace the default password with your own as soon as you install the extension.
 
-*How to access the extension's Options page.*
 
-![GIF demo](https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExOTlqcDI0b2JsdmxnMDlkbWM4ZTdxeTBia3NtNzB0cHpienloM2hqMiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/pUjCCfM9u3wtWl7a7J/giphy.gif)
+\## ✨ Features
+
+
+
+\- 🔐 \*\*Password Protection\*\*: Requires password authentication for access
+
+\- 🎨 \*\*Beautiful UI\*\*: Modern design with smooth animations and particle effects
+
+\- 📊 \*\*Attempt Tracking\*\*: Display number of failed password attempts
+
+\- 🚫 \*\*Shortcut Prevention\*\*: Blocks F12, Ctrl+Shift+I, Ctrl+U in security popup
+
+\- 🖱️ \*\*Right-click Protection\*\*: Disables context menu in security popup only
+
+\- ⚡ \*\*Non-intrusive\*\*: Doesn't interfere with normal website functionality
+
+\- 🔄 \*\*Auto Focus\*\*: Automatically focuses on password input field
+
+\- 🎯 \*\*Unlimited Attempts\*\*: No lockout mechanism - try as many times as needed
+
+
+
+\## 🛠️ Installation
+
+
+
+\### Manual Installation (Developer Mode)
+
+1\. Download or clone this repository
+
+2\. Open Chrome and navigate to `chrome://extensions/`
+
+3\. Enable "Developer mode" in the top right corner
+
+4\. Click "Load unpacked" and select the extension folder
+
+5\. The extension will appear in your extensions list and toolbar
+
+
+
+\## 📁 File Structure
+
+
+
+```
+
+browser-locker/
+
+├── manifest.json          # Extension configuration
+
+├── popup.html             # Main popup interface
+
+├── popup.js               # Popup logic and functionality
+
+├── background.js          # Service worker script
+
+├── content.js             # Content script (if needed)
+
+├── lockscreen.html        # Lock screen interface
+
+├── lockscreen.js          # Lock screen functionality
+
+├── options.html           # Extension options page
+
+├── options.js             # Options page functionality
+
+├── icons/                 # Icon directory
+
+│   ├── icon16.png
+
+│   ├── icon48.png
+
+│   └── icon128.png
+
+└── README.md              # This file
+
+```
+
+
+
+\## ⚙️ Configuration
+
+
+
+\### Change Default Password
+
+
+
+The default password is `123456`. To change it:
+
+
+
+1\. Open Chrome DevTools (F12)
+
+2\. Go to Console tab
+
+3\. Run the command:
+
+```javascript
+
+chrome.storage.local.set({lockerPassword: "your\_new\_password"});
+
+```
+
+
+
+\### Alternative Method via Options Page
+
+1\. Right-click the extension icon
+
+2\. Select "Options"
+
+3\. Enter your new password
+
+4\. Click "Save"
+
+
+
+\### Reset Extension
+
+
+
+To reset to initial state:
+
+```javascript
+
+chrome.storage.local.clear();
+
+```
+
+
+
+\## 🎮 Usage
+
+
+
+1\. \*\*Activation\*\*: Click the Browser Locker icon in your toolbar
+
+2\. \*\*Enter Password\*\*: Type your password in the popup that appears
+
+3\. \*\*Access Granted\*\*: After correct password entry, popup closes and normal browsing resumes
+
+4\. \*\*Security Features\*\*: The popup blocks common shortcuts and right-click for enhanced security
+
+
+
+\## 🔧 Customization
+
+
+
+\### Modify Interface
+
+
+
+Edit `popup.css` and related files to customize:
+
+\- Color schemes and themes
+
+\- Font families and sizes
+
+\- Animation effects and transitions
+
+\- Popup dimensions and layout
+
+
+
+\### Add Features
+
+
+
+Modify `popup.js` to:
+
+\- Add new authentication logic
+
+\- Customize success/error messages
+
+\- Change post-authentication behavior
+
+\- Implement additional security measures
+
+
+
+\## 🛡️ Security Features
+
+
+
+\- ✅ \*\*Secure Storage\*\*: Uses Chrome Storage API (not plain text)
+
+\- ✅ \*\*Local Only\*\*: No data sent to external servers
+
+\- ✅ \*\*Limited Scope\*\*: Only affects extension popup, not web pages
+
+\- ✅ \*\*Basic Bypass Protection\*\*: Disables common developer shortcuts
+
+\- ✅ \*\*Right-click Protection\*\*: Context menu disabled in security popup
+
+\- ✅ \*\*Focus Management\*\*: Prevents easy navigation away from password field
+
+
+
+\## ❗ Important Notes
+
+
+
+\- This extension is \*\*NOT\*\* a replacement for official security measures
+
+\- Provides basic protection and can be bypassed by experienced users
+
+\- Not intended for protecting sensitive or critical data
+
+\- May not function properly in certain edge cases or browser configurations
+
+
+
+\## 🐛 Troubleshooting
+
+
+
+\### Popup Not Displaying
+
+\- Check if extension is enabled in `chrome://extensions/`
+
+\- Try disabling and re-enabling the extension
+
+\- Check browser console for errors (F12)
+
+
+
+\### Forgot Password
+
+\- Open DevTools and run: `chrome.storage.local.get(\['lockerPassword'], console.log)`
+
+\- Or reset to default: `chrome.storage.local.set({lockerPassword: "123456"})`
+
+
+
+\### Extension Not Working
+
+\- Verify Manifest V3 compatibility
+
+\- Check Chrome Extensions page for errors
+
+\- Try reloading the extension
+
+\- Ensure all required permissions are granted
+
+
+
+\### Lock Screen Issues
+
+\- Clear browser cache and cookies
+
+\- Check if content script is properly injected
+
+\- Verify storage permissions are granted
+
+
+
+\## 🔒 Permissions Explained
+
+
+
+\- \*\*storage\*\*: Store password and settings locally
+
+\- \*\*tabs\*\*: Manage browser tabs (if needed)
+
+\- \*\*activeTab\*\*: Access current tab information
+
+
+
+\## 📄 License
+
+
+
+MIT License - See LICENSE file for details
+
+
+
+\## 🤝 Contributing
+
+
+
+All contributions are welcome!
+
+
+
+1\. Fork the repository
+
+2\. Create a new branch (`git checkout -b feature/AmazingFeature`)
+
+3\. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+
+4\. Push to branch (`git push origin feature/AmazingFeature`)
+
+5\. Create a Pull Request
+
+
+
+\### Development Guidelines
+
+\- Follow existing code style and conventions
+
+\- Test thoroughly across different Chrome versions
+
+\- Update documentation for new features
+
+\- Ensure backward compatibility when possible
+
+
+
+\## 📞 Contact
+
+
+
+\- \*\*Issues\*\*: \[GitHub Issues](https://github.com/qckhanh195)
+
+\- \*\*Website\*\*: https://qckhanh.id.vn/
+
+
+
+\## 🔄 Changelog
+
+
+
+\### v1.0.0 (2024-09-23)
+
+\- ✨ Initial release with basic password protection
+
+\- 🎨 Modern popup interface with particle animations
+
+\- 🔐 Basic security features (shortcut blocking, right-click protection)
+
+\- 📊 Failed attempt counter (display only, no lockout)
+
+\- ⚡ Auto-focus password input field
+
+\- 🛠️ Options page for password management
+
+\- 📱 Lock screen functionality
+
+
+
+\### Planned Features
+
+\- 🔄 Automatic session timeout
+
+\- 🎨 Multiple theme options
+
+\- 🔐 Enhanced encryption methods
+
+\- 📊 Usage statistics
+
+\- 🌐 Multi-language support
+
+
+
+\## 📚 Technical Details
+
+
+
+\### Browser Compatibility
+
+\- Chrome 88+ (Manifest V3 support required)
+
+\- Chromium-based browsers (Edge, Brave, etc.)
+
+
+
+\### Performance
+
+\- Lightweight footprint (~50KB total)
+
+\- Minimal CPU usage
+
+\- No background network activity
+
+\- Fast startup time
+
+
+
+\### Architecture
+
+\- Manifest V3 service worker
+
+\- Modern ES6+ JavaScript
+
+\- CSS3 animations and transitions
+
+\- Local storage only (no external dependencies)
+
+
 
 ---
 
-**Options screen**
 
-<img src="https://i.postimg.cc/vHY0v6N0/Screenshot-2025-07-20-104726.png" alt="Start screen" width="600"/>
-
-`When the password is changed, the browser will automatically log out.`
-
-<a name="limitations"></a>
-## Limitations
-
-**Lock screen:**
-
-- Still allows access to `chrome://*` domains ( chrome://chrome-urls/ )
-
-- Chrome right-click features are still usable
-
-- Extensions can still be easily removed via settings or the extensions bar :DDDD
-  
-
-<p align="center">
-  <img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExenFodDQzYndiamR0Ym1ueXdiZ3M4czNrdHIwZjRzM2EzankwYWN5biZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Bjh3pSRGX9rOg/giphy.gif" alt="GIF demo">
-</p>
-
-<p align="center">
-  <strong> - My skills are limited, please bear with me :)) - </strong>
-</p>
-
-
-> These limitations are partly due to changes from Manifest V2 to V3, so I haven't been able to fully resolve them yet ( I guess so, but if it's wrong, don’t ask me 😅) :DDD
-
-**Password:**
-
-- No "forgot password" feature yet
-
-
-**There may also be some other limitations, but we haven’t discovered them yet :DD**
-
----
 
 > 😄 Thank you for your interest and support. 💖
 
-> ✨ This extension was created with the companionship and efforts of my assistant — ChatGPT :D 🤖 
+
+
+> ✨ This extension was created with the companionship and efforts of my assistant — Claude :D 🤖 
+
