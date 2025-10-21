@@ -2,7 +2,7 @@
 
 Read the [Configuration](#configuration) section before installing and using.
 
-**Chrome Locker Extension v2** has many improvements compared to **version v1 (main)**, but there are still some unresolved limitations ⚠️ Therefore, it is not able to provide **absolute protection** 🔒 — it can still be _"cracked"_ quite easily
+**Chrome Locker Extension v2** has many improvements compared to **version v1 (main)**, but there are still some unresolved limitations ⚠️
 
 ## 📝 Description
 
@@ -18,6 +18,13 @@ Browser Locker is a simple Chrome Extension designed to protect your privacy by 
  ⚡ **Non-intrusive**: Doesn't interfere with normal website functionality  
  🔄 **Auto Focus**: Automatically focuses on password input field  
  🎯 **Unlimited Attempts**: No lockout mechanism - try as many times as needed
+
+## ❗ Important Notes
+
+- This extension is **NOT** a replacement for official security measures
+- Provides basic protection and can be bypassed by experienced users
+- Not intended for protecting sensitive or critical data
+- May not function properly in certain edge cases or browser configurations
 
 ## 🛠️ Installation
 
@@ -119,13 +126,6 @@ Modify `popup.js` to:
 ✅ **Basic Bypass Protection**: Disables common developer shortcuts  
 ✅ **Right-click Protection**: Context menu disabled in security popup  
 ✅ **Focus Management**: Prevents easy navigation away from password field
-
-## ❗ Important Notes
-
-- This extension is **NOT** a replacement for official security measures
-- Provides basic protection and can be bypassed by experienced users
-- Not intended for protecting sensitive or critical data
-- May not function properly in certain edge cases or browser configurations
 
 ## 🐛 Troubleshooting
 
