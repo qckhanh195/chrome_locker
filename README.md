@@ -181,6 +181,7 @@ All contributions are welcome!
 
 ## 📞 Contact
 
+- **Email**: qckhanh205@gmail.com
 - **Issues**: [GitHub Issues](https://github.com/qckhanh195)  
 - **Website**: [https://qckhanh.id.vn/](https://qckhanh.id.vn/)  
 
@@ -210,7 +211,6 @@ All contributions are welcome!
 > 😄 Thank you for your interest and support. 💖  
 >
 > ✨ This extension was created with the companionship and efforts of my assistant — Claude :D 🤖
-
 
 <p align="center">
   🚀 <b>Built with Vibe Code</b> 🤖
