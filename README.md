@@ -213,5 +213,5 @@ All contributions are welcome!
 
 
 <p align="center">
-  <h3>🚀 Built with <b>Vibe Code</b> 🤖</h3>
+  🚀 <b>Built with Vibe Code</b> 🤖
 </p>
