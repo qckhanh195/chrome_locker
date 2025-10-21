@@ -1,254 +1,277 @@
 * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: #fff;
-      overflow-x: hidden;
-    }
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  overflow-x: hidden;
+}
 
-    /* Animated background particles */
-    .particles {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      z-index: 0;
-    }
+/* Animated background particles */
+.particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+}
 
-    .particle {
-      position: absolute;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 50%;
-      animation: float 8s infinite ease-in-out;
-    }
+.particle {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  animation: float 8s infinite ease-in-out;
+}
 
-    @keyframes float {
-      0%, 100% { transform: translateY(0px) translateX(0px) rotate(0deg); }
-      33% { transform: translateY(-30px) translateX(20px) rotate(120deg); }
-      66% { transform: translateY(20px) translateX(-20px) rotate(240deg); }
-    }
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px) translateX(0px) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-30px) translateX(20px) rotate(120deg);
+  }
+  66% {
+    transform: translateY(20px) translateX(-20px) rotate(240deg);
+  }
+}
 
-    .container {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      padding: 40px;
-      border-radius: 20px;
-      max-width: 450px;
-      width: 90%;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-      position: relative;
-      z-index: 1;
-      animation: slideIn 0.6s ease-out;
-    }
+.container {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 40px;
+  border-radius: 20px;
+  max-width: 450px;
+  width: 90%;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 1;
+  animation: slideIn 0.6s ease-out;
+}
 
-    @keyframes slideIn {
-      from {
-        opacity: 0;
-        transform: translateY(-30px) scale(0.95);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-    }
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
 
-    .header {
-      text-align: center;
-      margin-bottom: 30px;
-    }
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+}
 
-    .icon {
-      font-size: 3rem;
-      margin-bottom: 15px;
-      animation: pulse 2s infinite;
-    }
+.icon {
+  font-size: 3rem;
+  margin-bottom: 15px;
+  animation: pulse 2s infinite;
+}
 
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.1); }
-    }
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
 
-    h2 {
-      font-size: 1.8rem;
-      font-weight: 600;
-      margin-bottom: 10px;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-    }
+h2 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
 
-    .subtitle {
-      font-size: 0.95rem;
-      opacity: 0.8;
-    }
+.subtitle {
+  font-size: 0.95rem;
+  opacity: 0.8;
+}
 
-    .input-group {
-      margin-bottom: 20px;
-      position: relative;
-    }
+.input-group {
+  margin-bottom: 20px;
+  position: relative;
+}
 
-    .input-label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 500;
-      font-size: 0.9rem;
-      opacity: 0.9;
-    }
+.input-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
 
-    .password-wrapper {
-      position: relative;
-      width: 100%;
-    }
+.password-wrapper {
+  position: relative;
+  width: 100%;
+}
 
-    .password-wrapper input {
-      width: 100%;
-      padding: 15px 50px 15px 20px;
-      font-size: 16px;
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      border-radius: 12px;
-      background: rgba(255, 255, 255, 0.1);
-      color: white;
-      transition: all 0.3s ease;
-      outline: none;
-    }
+.password-wrapper input {
+  width: 100%;
+  padding: 15px 50px 15px 20px;
+  font-size: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  transition: all 0.3s ease;
+  outline: none;
+}
 
-    .password-wrapper input::placeholder {
-      color: rgba(255, 255, 255, 0.6);
-    }
+.password-wrapper input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
 
-    .password-wrapper input:focus {
-      border-color: rgba(255, 255, 255, 0.8);
-      background: rgba(255, 255, 255, 0.2);
-      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
-    }
+.password-wrapper input:focus {
+  border-color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+}
 
-    .toggle-password {
-      position: absolute;
-      right: 15px;
-      top: 50%;
-      transform: translateY(-50%);
-      cursor: pointer;
-      user-select: none;
-      font-size: 20px;
-      opacity: 0.7;
-      transition: all 0.3s ease;
-      padding: 5px;
-      border-radius: 50%;
-    }
+.toggle-password {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  user-select: none;
+  font-size: 20px;
+  opacity: 0.7;
+  transition: all 0.3s ease;
+  padding: 5px;
+  border-radius: 50%;
+}
 
-    .toggle-password:hover {
-      opacity: 1;
-      background: rgba(255, 255, 255, 0.1);
-    }
+.toggle-password:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.1);
+}
 
-    .save-btn {
-      width: 100%;
-      padding: 15px 20px;
-      font-size: 16px;
-      font-weight: 600;
-      background: linear-gradient(135deg, #2ed573 0%, #17c0eb 100%);
-      color: white;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      margin-top: 20px;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-    }
+.save-btn {
+  width: 100%;
+  padding: 15px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  background: linear-gradient(135deg, #2ed573 0%, #17c0eb 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
 
-    .save-btn::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-      transition: left 0.5s;
-    }
+.save-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: left 0.5s;
+}
 
-    .save-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(46, 213, 115, 0.3);
-    }
+.save-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(46, 213, 115, 0.3);
+}
 
-    .save-btn:hover::before {
-      left: 100%;
-    }
+.save-btn:hover::before {
+  left: 100%;
+}
 
-    .save-btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-      transform: none;
-    }
+.save-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
 
-    .message {
-      margin-top: 20px;
-      padding: 12px 15px;
-      border-radius: 8px;
-      text-align: center;
-      font-size: 0.9rem;
-      animation: fadeIn 0.3s ease-out;
-    }
+.message {
+  margin-top: 20px;
+  padding: 12px 15px;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 0.9rem;
+  animation: fadeIn 0.3s ease-out;
+}
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-    .error-message {
-      background: rgba(220, 53, 69, 0.2);
-      border: 1px solid rgba(220, 53, 69, 0.4);
-      color: #ff6b6b;
-    }
+.error-message {
+  background: rgba(220, 53, 69, 0.2);
+  border: 1px solid rgba(220, 53, 69, 0.4);
+  color: #ff6b6b;
+}
 
-    .success-message {
-      background: rgba(46, 213, 115, 0.2);
-      border: 1px solid rgba(46, 213, 115, 0.4);
-      color: #2ed573;
-    }
+.success-message {
+  background: rgba(46, 213, 115, 0.2);
+  border: 1px solid rgba(46, 213, 115, 0.4);
+  color: #2ed573;
+}
 
-    .loading {
-      opacity: 0.6;
-      pointer-events: none;
-    }
+.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
 
-    .loading .save-btn {
-      cursor: not-allowed;
-    }
+.loading .save-btn {
+  cursor: not-allowed;
+}
 
-    .footer {
-      text-align: center;
-      margin-top: 30px;
-      padding-top: 20px;
-      border-top: 1px solid rgba(255, 255, 255, 0.2);
-      font-size: 0.85rem;
-      opacity: 0.7;
-    }
+.footer {
+  text-align: center;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
 
-    /* Responsive */
-    @media (max-width: 500px) {
-      .container {
-        padding: 30px 20px;
-        margin: 20px;
-      }
-      
-      h2 {
-        font-size: 1.5rem;
-      }
-      
-      .icon {
-        font-size: 2.5rem;
-      }
-    }
+/* Responsive */
+@media (max-width: 500px) {
+  .container {
+    padding: 30px 20px;
+    margin: 20px;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  .icon {
+    font-size: 2.5rem;
+  }
+}

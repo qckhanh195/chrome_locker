@@ -1,5 +1,10 @@
 # Browser Locker Extension
 
+`Read the #Configuration section before installing and using.`
+
+**Chrome Locker Extension v2** has many improvements compared to **version v1 (main)**, but there are still some unresolved limitations ⚠️ Therefore, it is not able to provide **absolute protection** 🔒 — it can still be *"cracked"* quite easily 
+
+
 ## 📝 Description
 
 Browser Locker is a simple Chrome Extension designed to protect your privacy by requiring a password for access. The extension acts as an additional security layer for your browser without interfering with normal web browsing activities.
@@ -205,3 +210,8 @@ All contributions are welcome!
 > 😄 Thank you for your interest and support. 💖  
 >
 > ✨ This extension was created with the companionship and efforts of my assistant — Claude :D 🤖
+
+
+<p align="center">
+  <h3>🚀 Built with <b>Vibe Code</b> 🤖</h3>
+</p>
