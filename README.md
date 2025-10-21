@@ -1,6 +1,6 @@
 # Browser Locker Extension
 
-`Read the #Configuration section before installing and using.`
+Read the [Configuration](#configuration) section before installing and using.
 
 **Chrome Locker Extension v2** has many improvements compared to **version v1 (main)**, but there are still some unresolved limitations ⚠️ Therefore, it is not able to provide **absolute protection** 🔒 — it can still be *"cracked"* quite easily 
 
@@ -56,7 +56,7 @@ chrome-lock-extension/
 └── README.md
 ```
 
-## ⚙️ Configuration
+## ⚙️ Configuration <a name="configuration"></a>
 
 ### Change Default Password
 
