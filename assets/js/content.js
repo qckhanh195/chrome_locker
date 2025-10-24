@@ -1,29 +1,46 @@
-// Enhanced content.js - Fixed random div IDs
+// Content.js - Only active when locked, completely inactive when unlocked
 (function() {
   'use strict';
 
-  let isInjected = false;
-  let observer = null;
   let overlayElement = null;
-  let isAccessGranted = false;
+  let isCurrentlyLocked = false;
+  let rightClickHandler = null;
+  let keydownHandler = null;
+  let selectHandler = null;
   
-  // Check access status from storage
-  function checkAccessStatus(callback) {
-    chrome.storage.local.get(["accessGranted"], function(result) {
-      if (chrome.runtime.lastError) {
-        callback(false);
-        return;
-      }
-      callback(result.accessGranted || false);
-    });
+  // Check if we should run at all
+  function shouldActivate() {
+    // Don't activate on extension pages
+    const url = window.location.href;
+    if (url.startsWith('chrome-extension://') || 
+        url.startsWith('chrome://') ||
+        url.startsWith('about:')) {
+      return false;
+    }
+    return true;
   }
   
-  function createFullScreenOverlay() {
+  // Check access status
+  function checkAccessStatus(callback) {
+    try {
+      chrome.storage.local.get(["accessGranted"], function(result) {
+        if (chrome.runtime.lastError) {
+          callback(false);
+          return;
+        }
+        callback(result.accessGranted || false);
+      });
+    } catch (e) {
+      callback(false);
+    }
+  }
+  
+  // Create overlay
+  function createOverlay() {
     if (overlayElement) return overlayElement;
     
     overlayElement = document.createElement('div');
     overlayElement.id = 'chrome-lock-overlay';
-    overlayElement.setAttribute('data-extension', 'chrome-lock'); // Đánh dấu rõ ràng
     overlayElement.style.cssText = `
       position: fixed !important;
       top: 0 !important;
@@ -37,281 +54,158 @@
       align-items: center !important;
       font-family: 'Segoe UI', sans-serif !important;
       color: white !important;
-      overflow: hidden !important;
-      user-select: none !important;
-      pointer-events: all !important;
     `;
     
-    // Tạo container với ID cố định
-    const container = document.createElement('div');
-    container.id = 'chrome-lock-content';
-    container.setAttribute('data-extension', 'chrome-lock');
-    container.style.cssText = 'text-align: center; animation: pulse 2s infinite;';
-    
-    // Tạo icon với ID cố định
-    const icon = document.createElement('div');
-    icon.id = 'chrome-lock-icon';
-    icon.style.cssText = 'font-size: 5rem; margin-bottom: 30px;';
-    icon.textContent = '🔒';
-    
-    // Tạo title với ID cố định
-    const title = document.createElement('h1');
-    title.id = 'chrome-lock-title';
-    title.style.cssText = 'font-size: 2.5rem; margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);';
-    title.textContent = 'Trình Duyệt Đã Được Khóa';
-    
-    // Tạo description với ID cố định
-    const description = document.createElement('p');
-    description.id = 'chrome-lock-description';
-    description.style.cssText = 'font-size: 1.2rem; opacity: 0.9; margin-bottom: 30px; line-height: 1.6;';
-    description.innerHTML = 'Chrome hiện đang được bảo vệ bởi Chrome Lock Extension.<br>Bạn cần mở khóa để có thể truy cập các trang web.';
-    
-    // Tạo button với ID cố định
-    const button = document.createElement('button');
-    button.id = 'chrome-lock-redirect-btn';
-    button.style.cssText = `
-      background: rgba(255, 255, 255, 0.2);
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      color: white;
-      padding: 15px 30px;
-      font-size: 16px;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      margin-top: 20px;
-    `;
-    button.textContent = '📱 Đi đến trang khóa';
-    
-    button.addEventListener('click', () => {
-      window.location.href = chrome.runtime.getURL("lockscreen.html");
-    });
-    
-    button.addEventListener('mouseenter', () => {
-      button.style.background = 'rgba(255, 255, 255, 0.3)';
-      button.style.borderColor = 'rgba(255, 255, 255, 0.5)';
-      button.style.transform = 'translateY(-2px)';
-    });
-    
-    button.addEventListener('mouseleave', () => {
-      button.style.background = 'rgba(255, 255, 255, 0.2)';
-      button.style.borderColor = 'rgba(255, 255, 255, 0.3)';
-      button.style.transform = 'translateY(0)';
-    });
-    
-    // Thêm CSS animation
-    const style = document.createElement('style');
-    style.id = 'chrome-lock-styles';
-    style.textContent = `
-      @keyframes pulse {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.05); }
-      }
+    overlayElement.innerHTML = `
+      <div style="text-align: center;">
+        <div style="font-size: 5rem; margin-bottom: 30px;">🔒</div>
+        <h1 style="font-size: 2.5rem; margin-bottom: 20px;">Trình Duyệt Đã Được Khóa</h1>
+        <p style="font-size: 1.2rem; opacity: 0.9; margin-bottom: 30px;">
+          Chrome hiện đang được bảo vệ.<br>Bạn cần mở khóa để truy cập.
+        </p>
+        <button id="lockRedirectBtn" style="
+          background: rgba(255, 255, 255, 0.2);
+          border: 2px solid rgba(255, 255, 255, 0.3);
+          color: white;
+          padding: 15px 30px;
+          font-size: 16px;
+          border-radius: 10px;
+          cursor: pointer;
+        ">📱 Đi đến trang khóa</button>
+      </div>
     `;
     
-    // Ghép các element lại
-    container.appendChild(icon);
-    container.appendChild(title);
-    container.appendChild(description);
-    container.appendChild(button);
-    
-    overlayElement.appendChild(container);
-    document.head.appendChild(style);
-    
-    // Chặn chuột phải CHỈ trên overlay
-    overlayElement.addEventListener('contextmenu', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      return false;
-    }, true);
+    const btn = overlayElement.querySelector('#lockRedirectBtn');
+    if (btn) {
+      btn.onclick = () => {
+        window.location.href = chrome.runtime.getURL("lockscreen.html");
+      };
+    }
     
     return overlayElement;
   }
   
-  function injectFullScreenLock() {
-    if (isInjected) return;
-    isInjected = true;
-
-    // Xóa overlay cũ nếu có
-    removeAllLockElements();
+  // Activate lock mode
+  function activateLockMode() {
+    if (isCurrentlyLocked) return;
+    isCurrentlyLocked = true;
     
-    const overlay = createFullScreenOverlay();
-    
-    if (document.body) {
-      document.body.appendChild(overlay);
-    } else if (document.documentElement) {
-      document.documentElement.appendChild(overlay);
+    // Create and show overlay
+    const overlay = createOverlay();
+    if (!document.body) {
+      setTimeout(() => activateLockMode(), 100);
+      return;
     }
+    document.body.appendChild(overlay);
     
-    // Ẩn nội dung trang
-    const allElements = document.querySelectorAll('body > *:not(#chrome-lock-overlay)');
-    allElements.forEach(el => {
-      if (el.id !== 'chrome-lock-overlay' && !el.hasAttribute('data-extension')) {
-        el.style.setProperty('display', 'none', 'important');
-      }
-    });
+    // Block right-click
+    rightClickHandler = function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      return false;
+    };
+    document.addEventListener('contextmenu', rightClickHandler, true);
     
-    startDOMProtection();
-  }
-  
-  function removeAllLockElements() {
-    // Xóa tất cả element của extension
-    const lockOverlay = document.getElementById('chrome-lock-overlay');
-    if (lockOverlay) lockOverlay.remove();
-    
-    const lockStyles = document.getElementById('chrome-lock-styles');
-    if (lockStyles) lockStyles.remove();
-    
-    // Xóa các div rác có thể còn sót lại
-    document.querySelectorAll('[data-extension="chrome-lock"]').forEach(el => el.remove());
-  }
-  
-  function removeLockOverlay() {
-    removeAllLockElements();
-    overlayElement = null;
-    isInjected = false;
-    
-    if (observer) {
-      observer.disconnect();
-      observer = null;
-    }
-    
-    // Khôi phục hiển thị trang
-    const allElements = document.querySelectorAll('body > *');
-    allElements.forEach(el => {
-      if (el.style.display === 'none') {
-        el.style.removeProperty('display');
-      }
-    });
-  }
-  
-  function startDOMProtection() {
-    if (observer) observer.disconnect();
-    
-    observer = new MutationObserver(function(mutations) {
-      checkAccessStatus((granted) => {
-        if (!granted) {
-          // Đảm bảo overlay vẫn tồn tại
-          if (!document.getElementById('chrome-lock-overlay')) {
-            const overlay = createFullScreenOverlay();
-            if (document.body) {
-              document.body.appendChild(overlay);
-            }
-          }
-          
-          // Xóa các element không phải của extension
-          mutations.forEach(mutation => {
-            mutation.addedNodes.forEach(node => {
-              if (node.nodeType === 1 && 
-                  !node.hasAttribute('data-extension') &&
-                  node.id !== 'chrome-lock-overlay' &&
-                  !document.getElementById('chrome-lock-overlay')?.contains(node)) {
-                node.style.setProperty('display', 'none', 'important');
-              }
-            });
-          });
-        }
-      });
-    });
-    
-    observer.observe(document.documentElement, {
-      childList: true,
-      subtree: true
-    });
-  }
-  
-  function checkAndLock() {
-    checkAccessStatus((granted) => {
-      isAccessGranted = granted;
+    // Block keyboard shortcuts
+    keydownHandler = function(e) {
+      const blocked = [
+        { key: 'F12' },
+        { ctrl: true, shift: true, key: 'I' },
+        { ctrl: true, shift: true, key: 'J' },
+        { ctrl: true, key: 'U' },
+      ];
       
-      if (!granted) {
-        injectFullScreenLock();
-      } else {
-        removeLockOverlay();
-      }
-    });
-  }
-  
-  // CHỈ chặn phím tắt khi CHƯA mở khóa
-  document.addEventListener('keydown', function(e) {
-    checkAccessStatus((granted) => {
-      if (!granted) {
-        const blockedShortcuts = [
-          { key: 'F12' },
-          { ctrl: true, shift: true, key: 'I' },
-          { ctrl: true, shift: true, key: 'J' },
-          { ctrl: true, key: 'U' },
-          { ctrl: true, shift: true, key: 'C' },
-        ];
-        
-        const isBlocked = blockedShortcuts.some(shortcut => {
-          return (!shortcut.ctrl || e.ctrlKey) &&
-                 (!shortcut.shift || e.shiftKey) &&
-                 (!shortcut.alt || e.altKey) &&
-                 (e.key === shortcut.key);
-        });
-        
-        if (isBlocked) {
-          e.preventDefault();
-          e.stopPropagation();
-          e.stopImmediatePropagation();
-          return false;
-        }
-      }
-    });
-  }, true);
-  
-  // CHỈ chặn chuột phải khi CHƯA mở khóa
-  document.addEventListener('contextmenu', function(e) {
-    checkAccessStatus((granted) => {
-      if (!granted) {
+      const isBlocked = blocked.some(s => {
+        return (!s.ctrl || e.ctrlKey) &&
+               (!s.shift || e.shiftKey) &&
+               (e.key === s.key);
+      });
+      
+      if (isBlocked) {
         e.preventDefault();
         e.stopPropagation();
-        e.stopImmediatePropagation();
         return false;
       }
-    });
-  }, true);
+    };
+    document.addEventListener('keydown', keydownHandler, true);
+    
+    // Block text selection
+    selectHandler = function(e) {
+      e.preventDefault();
+      return false;
+    };
+    document.addEventListener('selectstart', selectHandler);
+  }
   
-  // CHỈ chặn select khi CHƯA mở khóa
-  document.addEventListener('selectstart', function(e) {
+  // Deactivate lock mode - RESTORE EVERYTHING
+  function deactivateLockMode() {
+    if (!isCurrentlyLocked) return;
+    isCurrentlyLocked = false;
+    
+    // Remove overlay
+    if (overlayElement && overlayElement.parentNode) {
+      overlayElement.parentNode.removeChild(overlayElement);
+    }
+    overlayElement = null;
+    
+    // Remove ALL event listeners
+    if (rightClickHandler) {
+      document.removeEventListener('contextmenu', rightClickHandler, true);
+      rightClickHandler = null;
+    }
+    
+    if (keydownHandler) {
+      document.removeEventListener('keydown', keydownHandler, true);
+      keydownHandler = null;
+    }
+    
+    if (selectHandler) {
+      document.removeEventListener('selectstart', selectHandler);
+      selectHandler = null;
+    }
+    
+    // Clean up any remaining elements
+    const lockElements = document.querySelectorAll('[id^="chrome-lock"]');
+    lockElements.forEach(el => el.remove());
+  }
+  
+  // Main check function
+  function checkAndApply() {
+    if (!shouldActivate()) return;
+    
     checkAccessStatus((granted) => {
-      if (!granted && !e.target.closest('#chrome-lock-overlay')) {
-        e.preventDefault();
-        return false;
+      if (granted) {
+        // UNLOCKED - Deactivate everything
+        deactivateLockMode();
+      } else {
+        // LOCKED - Activate protection
+        activateLockMode();
       }
     });
-  });
+  }
   
-  // Listen for access status changes
+  // Listen for storage changes
   chrome.storage.onChanged.addListener((changes, namespace) => {
     if (namespace === 'local' && changes.accessGranted) {
-      isAccessGranted = changes.accessGranted.newValue;
-      checkAndLock();
+      checkAndApply();
     }
   });
   
-  // Monitor for extension changes
-  chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+  // Listen for messages
+  chrome.runtime.onMessage.addListener((message) => {
     if (message.action === 'recheckLock') {
-      checkAndLock();
+      checkAndApply();
     }
-  });
-  
-  // Cleanup on page unload
-  window.addEventListener('beforeunload', () => {
-    removeAllLockElements();
   });
   
   // Initial check
-  checkAndLock();
-  
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', checkAndLock);
+    document.addEventListener('DOMContentLoaded', checkAndApply);
+  } else {
+    checkAndApply();
   }
   
-  // Periodic check
-  setInterval(() => {
-    checkAndLock();
-  }, 2000);
+  // Periodic check (less frequent)
+  setInterval(checkAndApply, 3000);
   
 })();

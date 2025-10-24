@@ -18,14 +18,7 @@
   "background": {
     "service_worker": "assets/js/background.js"
   },
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["assets/js/content.js"],
-      "run_at": "document_start",
-      "all_frames": true
-    }
-  ],
+
   "action": {
     "default_popup": "popup.html",
     "default_title": "Chrome Lock",

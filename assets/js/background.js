@@ -1,4 +1,4 @@
-// Enhanced background.js with improved security
+// Background.js - Inject content script only when needed
 chrome.runtime.onStartup.addListener(() => {
   chrome.storage.local.set({ accessGranted: false });
   redirectToLockscreen();
@@ -30,106 +30,91 @@ function redirectToLockscreen() {
   });
 }
 
-// Enhanced navigation blocking
-chrome.webNavigation.onBeforeNavigate.addListener((details) => {
-  chrome.storage.local.get(["accessGranted", "lockoutTime"], (res) => {
-    const url = details.url;
-    const isInternal = url.startsWith("chrome-extension://");
-    const isChromeUrl = url.startsWith("chrome://");
-    const isBlocked = url.startsWith("chrome://extensions") || 
-                     url.startsWith("chrome://settings") ||
-                     url.startsWith("chrome://chrome-urls") ||
-                     url.startsWith("chrome://flags");
+// Inject content script only when locked
+async function injectContentScript(tabId) {
+  try {
+    await chrome.scripting.executeScript({
+      target: { tabId: tabId },
+      files: ['assets/js/content.js']
+    });
+  } catch (e) {
+    console.log('Cannot inject script:', e);
+  }
+}
 
-    // Check if currently in lockout period
-    if (res.lockoutTime && Date.now() < res.lockoutTime) {
-      if (!url.startsWith(chrome.runtime.getURL(""))) {
-        chrome.tabs.update(details.tabId, {
-          url: chrome.runtime.getURL("lockscreen.html")
-        });
-      }
-      return;
+// Check if tab needs protection
+async function checkAndProtectTab(tabId, url) {
+  // Skip extension pages and chrome:// URLs
+  if (!url || 
+      url.startsWith('chrome://') || 
+      url.startsWith('chrome-extension://') ||
+      url.startsWith('about:')) {
+    return;
+  }
+  
+  const result = await chrome.storage.local.get(['accessGranted']);
+  
+  if (!result.accessGranted) {
+    // Only inject if not already on lockscreen
+    if (!url.includes('lockscreen.html')) {
+      await injectContentScript(tabId);
     }
+  }
+}
 
-  });
+// Monitor navigation
+chrome.webNavigation.onCommitted.addListener(async (details) => {
+  if (details.frameId !== 0) return; // Only main frame
+  
+  await checkAndProtectTab(details.tabId, details.url);
 });
 
-chrome.tabs.onCreated.addListener((tab) => {
-  chrome.storage.local.get(["accessGranted", "lockoutTime"], (res) => {
-    if (res.lockoutTime && Date.now() < res.lockoutTime) {
-      chrome.tabs.update(tab.id, { url: chrome.runtime.getURL("lockscreen.html") });
-    } else if (!res.accessGranted) {
-      chrome.tabs.update(tab.id, { url: chrome.runtime.getURL("lockscreen.html") });
-    }
-  });
-});
-
-// Block context menu when locked
-chrome.storage.local.get("accessGranted", (res) => {
-  if (!res.accessGranted) {
-    chrome.contextMenus.removeAll();
+// Monitor new tabs
+chrome.tabs.onCreated.addListener(async (tab) => {
+  const result = await chrome.storage.local.get(['accessGranted']);
+  
+  if (!result.accessGranted) {
+    chrome.tabs.update(tab.id, { url: chrome.runtime.getURL("lockscreen.html") });
   }
 });
 
-// Enhanced message handling
-// chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-//   if (message.action === "exitBrowser") {
-//     chrome.tabs.query({}, (tabs) => {
-//       tabs.forEach(tab => chrome.tabs.remove(tab.id));
-//     });
-//   } else if (message.action === "closeOptionsTab") {
-//     // Close the options tab
-//     chrome.tabs.query({ url: chrome.runtime.getURL("options.html") }, (tabs) => {
-//       if (tabs.length > 0) {
-//         chrome.tabs.remove(tabs[0].id);
-//       }
-//     });
-//   } else if (message.action === "checkLockout") {
-//     chrome.storage.local.get("lockoutTime", (res) => {
-//       sendResponse({ 
-//         isLocked: res.lockoutTime && Date.now() < res.lockoutTime,
-//         remainingTime: res.lockoutTime ? Math.max(0, res.lockoutTime - Date.now()) : 0
-//       });
-//     });
-//     return true; // Keep message channel open for async response
-//   } else if (message.action === "incrementFailedAttempts") {
-//     chrome.storage.local.get(["failedAttempts", "lockoutTime"], (res) => {
-//       const attempts = (res.failedAttempts || 0) + 1;
-//       let lockoutTime = res.lockoutTime || 0;
-      
-//       if (attempts >= 3) {
-//         lockoutTime = Date.now() + (5 * 60 * 1000); // 5 minutes lockout
-//         chrome.storage.local.set({ failedAttempts: 0, lockoutTime });
-//       } else {
-//         chrome.storage.local.set({ failedAttempts: attempts });
-//       }
-      
-//       sendResponse({ attempts, lockoutTime });
-//     });
-//     return true;
-//   } else if (message.action === "resetFailedAttempts") {
-//     chrome.storage.local.set({ failedAttempts: 0, lockoutTime: 0 });
-//   }
-// });
-// background.js - Đơn giản, không can thiệp trang web
+// Monitor tab updates
+chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
+  if (changeInfo.status === 'loading' && changeInfo.url) {
+    await checkAndProtectTab(tabId, changeInfo.url);
+  }
+});
+
+// Handle messages
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === "resetFailedAttempts") {
     chrome.storage.local.set({ failedAttempts: 0 });
     sendResponse({ success: true });
   }
+  return true;
 });
 
-// Periodic check to ensure lock screen is active
-setInterval(() => {
-  chrome.storage.local.get(["accessGranted", "lockoutTime"], (res) => {
-    if (!res.accessGranted || (res.lockoutTime && Date.now() < res.lockoutTime)) {
-      chrome.tabs.query({}, (tabs) => {
-        tabs.forEach(tab => {
-          if (!tab.url.startsWith(chrome.runtime.getURL(""))) {
-            chrome.tabs.update(tab.id, { url: chrome.runtime.getURL("lockscreen.html") });
-          }
-        });
-      });
+// Periodic check - Less aggressive
+setInterval(async () => {
+  const result = await chrome.storage.local.get(['accessGranted']);
+  
+  if (!result.accessGranted) {
+    const tabs = await chrome.tabs.query({});
+    
+    for (const tab of tabs) {
+      if (tab.url && 
+          !tab.url.startsWith('chrome://') &&
+          !tab.url.startsWith('chrome-extension://') &&
+          !tab.url.includes('lockscreen.html')) {
+        
+        // Send message to existing content scripts
+        try {
+          await chrome.tabs.sendMessage(tab.id, { action: 'recheckLock' });
+        } catch (e) {
+          // If no content script, inject it
+          await injectContentScript(tab.id);
+        }
+      }
     }
-  });
-}, 2000); // Check every 2 seconds
+  }
+}, 5000); // Check every 5 seconds instead of 2
