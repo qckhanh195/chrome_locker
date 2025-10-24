@@ -1,4 +1,4 @@
-// Enhanced content.js with conditional protection
+// Enhanced content.js - Fixed random div IDs
 (function() {
   'use strict';
 
@@ -23,6 +23,7 @@
     
     overlayElement = document.createElement('div');
     overlayElement.id = 'chrome-lock-overlay';
+    overlayElement.setAttribute('data-extension', 'chrome-lock'); // Đánh dấu rõ ràng
     overlayElement.style.cssText = `
       position: fixed !important;
       top: 0 !important;
@@ -41,48 +42,80 @@
       pointer-events: all !important;
     `;
     
-    overlayElement.innerHTML = `
-      <div style="text-align: center; animation: pulse 2s infinite;">
-        <div style="font-size: 5rem; margin-bottom: 30px;">🔒</div>
-        <h1 style="font-size: 2.5rem; margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
-          Trình Duyệt Đã Được Khóa
-        </h1>
-        <p style="font-size: 1.2rem; opacity: 0.9; margin-bottom: 30px; line-height: 1.6;">
-          Chrome hiện đang được bảo vệ bởi Chrome Lock Extension.<br>
-          Bạn cần mở khóa để có thể truy cập các trang web.
-        </p>
-        <button id="redirectToLock" style="
-          background: rgba(255, 255, 255, 0.2);
-          border: 2px solid rgba(255, 255, 255, 0.3);
-          color: white;
-          padding: 15px 30px;
-          font-size: 16px;
-          border-radius: 10px;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          margin-top: 20px;
-        ">
-          📱 Đi đến trang khóa
-        </button>
-      </div>
-      
-      <style>
-        @keyframes pulse {
-          0%, 100% { transform: scale(1); }
-          50% { transform: scale(1.05); }
-        }
-        #redirectToLock:hover {
-          background: rgba(255, 255, 255, 0.3) !important;
-          border-color: rgba(255, 255, 255, 0.5) !important;
-          transform: translateY(-2px);
-        }
-      </style>
-    `;
+    // Tạo container với ID cố định
+    const container = document.createElement('div');
+    container.id = 'chrome-lock-content';
+    container.setAttribute('data-extension', 'chrome-lock');
+    container.style.cssText = 'text-align: center; animation: pulse 2s infinite;';
     
-    const redirectBtn = overlayElement.querySelector('#redirectToLock');
-    redirectBtn.addEventListener('click', () => {
+    // Tạo icon với ID cố định
+    const icon = document.createElement('div');
+    icon.id = 'chrome-lock-icon';
+    icon.style.cssText = 'font-size: 5rem; margin-bottom: 30px;';
+    icon.textContent = '🔒';
+    
+    // Tạo title với ID cố định
+    const title = document.createElement('h1');
+    title.id = 'chrome-lock-title';
+    title.style.cssText = 'font-size: 2.5rem; margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);';
+    title.textContent = 'Trình Duyệt Đã Được Khóa';
+    
+    // Tạo description với ID cố định
+    const description = document.createElement('p');
+    description.id = 'chrome-lock-description';
+    description.style.cssText = 'font-size: 1.2rem; opacity: 0.9; margin-bottom: 30px; line-height: 1.6;';
+    description.innerHTML = 'Chrome hiện đang được bảo vệ bởi Chrome Lock Extension.<br>Bạn cần mở khóa để có thể truy cập các trang web.';
+    
+    // Tạo button với ID cố định
+    const button = document.createElement('button');
+    button.id = 'chrome-lock-redirect-btn';
+    button.style.cssText = `
+      background: rgba(255, 255, 255, 0.2);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      padding: 15px 30px;
+      font-size: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 20px;
+    `;
+    button.textContent = '📱 Đi đến trang khóa';
+    
+    button.addEventListener('click', () => {
       window.location.href = chrome.runtime.getURL("lockscreen.html");
     });
+    
+    button.addEventListener('mouseenter', () => {
+      button.style.background = 'rgba(255, 255, 255, 0.3)';
+      button.style.borderColor = 'rgba(255, 255, 255, 0.5)';
+      button.style.transform = 'translateY(-2px)';
+    });
+    
+    button.addEventListener('mouseleave', () => {
+      button.style.background = 'rgba(255, 255, 255, 0.2)';
+      button.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+      button.style.transform = 'translateY(0)';
+    });
+    
+    // Thêm CSS animation
+    const style = document.createElement('style');
+    style.id = 'chrome-lock-styles';
+    style.textContent = `
+      @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+      }
+    `;
+    
+    // Ghép các element lại
+    container.appendChild(icon);
+    container.appendChild(title);
+    container.appendChild(description);
+    container.appendChild(button);
+    
+    overlayElement.appendChild(container);
+    document.head.appendChild(style);
     
     // Chặn chuột phải CHỈ trên overlay
     overlayElement.addEventListener('contextmenu', (e) => {
@@ -98,11 +131,8 @@
     if (isInjected) return;
     isInjected = true;
 
-    try {
-      document.documentElement.innerHTML = '';
-    } catch (e) {
-      console.log('Cannot replace HTML, using overlay method');
-    }
+    // Xóa overlay cũ nếu có
+    removeAllLockElements();
     
     const overlay = createFullScreenOverlay();
     
@@ -112,33 +142,31 @@
       document.documentElement.appendChild(overlay);
     }
     
-    const allElements = document.querySelectorAll('*');
+    // Ẩn nội dung trang
+    const allElements = document.querySelectorAll('body > *:not(#chrome-lock-overlay)');
     allElements.forEach(el => {
-      if (el.id !== 'chrome-lock-overlay' && !overlay.contains(el)) {
-        el.style.display = 'none';
+      if (el.id !== 'chrome-lock-overlay' && !el.hasAttribute('data-extension')) {
+        el.style.setProperty('display', 'none', 'important');
       }
     });
-    
-    const style = document.createElement('style');
-    style.innerHTML = `
-      html, body {
-        margin: 0 !important;
-        padding: 0 !important;
-        width: 100% !important;
-        height: 100% !important;
-        overflow: hidden !important;
-        background: #667eea !important;
-      }
-    `;
-    document.head.appendChild(style);
     
     startDOMProtection();
   }
   
+  function removeAllLockElements() {
+    // Xóa tất cả element của extension
+    const lockOverlay = document.getElementById('chrome-lock-overlay');
+    if (lockOverlay) lockOverlay.remove();
+    
+    const lockStyles = document.getElementById('chrome-lock-styles');
+    if (lockStyles) lockStyles.remove();
+    
+    // Xóa các div rác có thể còn sót lại
+    document.querySelectorAll('[data-extension="chrome-lock"]').forEach(el => el.remove());
+  }
+  
   function removeLockOverlay() {
-    if (overlayElement && overlayElement.parentNode) {
-      overlayElement.parentNode.removeChild(overlayElement);
-    }
+    removeAllLockElements();
     overlayElement = null;
     isInjected = false;
     
@@ -147,11 +175,11 @@
       observer = null;
     }
     
-    // Restore page visibility
-    const allElements = document.querySelectorAll('*');
+    // Khôi phục hiển thị trang
+    const allElements = document.querySelectorAll('body > *');
     allElements.forEach(el => {
       if (el.style.display === 'none') {
-        el.style.display = '';
+        el.style.removeProperty('display');
       }
     });
   }
@@ -160,21 +188,34 @@
     if (observer) observer.disconnect();
     
     observer = new MutationObserver(function(mutations) {
-      // Only protect if still locked
       checkAccessStatus((granted) => {
         if (!granted) {
+          // Đảm bảo overlay vẫn tồn tại
           if (!document.getElementById('chrome-lock-overlay')) {
             const overlay = createFullScreenOverlay();
-            document.body.appendChild(overlay);
+            if (document.body) {
+              document.body.appendChild(overlay);
+            }
           }
+          
+          // Xóa các element không phải của extension
+          mutations.forEach(mutation => {
+            mutation.addedNodes.forEach(node => {
+              if (node.nodeType === 1 && 
+                  !node.hasAttribute('data-extension') &&
+                  node.id !== 'chrome-lock-overlay' &&
+                  !document.getElementById('chrome-lock-overlay')?.contains(node)) {
+                node.style.setProperty('display', 'none', 'important');
+              }
+            });
+          });
         }
       });
     });
     
     observer.observe(document.documentElement, {
       childList: true,
-      subtree: true,
-      attributes: true
+      subtree: true
     });
   }
   
@@ -228,7 +269,6 @@
         e.stopImmediatePropagation();
         return false;
       }
-      // Nếu đã mở khóa, CHO PHÉP chuột phải hoạt động bình thường
     });
   }, true);
   
@@ -255,6 +295,11 @@
     if (message.action === 'recheckLock') {
       checkAndLock();
     }
+  });
+  
+  // Cleanup on page unload
+  window.addEventListener('beforeunload', () => {
+    removeAllLockElements();
   });
   
   // Initial check

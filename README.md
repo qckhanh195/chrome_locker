@@ -11,13 +11,13 @@ Browser Locker is a simple Chrome Extension designed to protect your privacy by 
 ## ✨ Features
 
 🔐 **Password Protection**: Requires password authentication for access  
- 🎨 **Beautiful UI**: Modern design with smooth animations and particle effects  
- 📊 **Attempt Tracking**: Display number of failed password attempts  
- 🚫 **Shortcut Prevention**: Blocks F12, Ctrl+Shift+I, Ctrl+U in security popup  
- 🖱️ **Right-click Protection**: Disables context menu in security popup only  
- ⚡ **Non-intrusive**: Doesn't interfere with normal website functionality  
- 🔄 **Auto Focus**: Automatically focuses on password input field  
- 🎯 **Unlimited Attempts**: No lockout mechanism - try as many times as needed
+🎨 **Beautiful UI**: Modern design with smooth animations and particle effects  
+📊 **Attempt Tracking**: Display number of failed password attempts  
+🚫 **Shortcut Prevention**: Blocks F12, Ctrl+Shift+I, Ctrl+U in security popup  
+🖱️ **Right-click Protection**: Disables context menu in security popup only  
+⚡ **Non-intrusive**: Doesn't interfere with normal website functionality  
+🔄 **Auto Focus**: Automatically focuses on password input field  
+🎯 **Unlimited Attempts**: No lockout mechanism - try as many times as needed
 
 ## ❗ Important Notes
 
