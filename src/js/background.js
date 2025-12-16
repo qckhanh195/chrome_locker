@@ -14,7 +14,7 @@ chrome.runtime.onStartup.addListener(async () => {
     redirectToLockscreen();
   } else {
     // Chưa có mật khẩu → mở trang cài đặt
-    chrome.tabs.create({ url: chrome.runtime.getURL("options.html?firstTime=true") });
+    chrome.tabs.create({ url: chrome.runtime.getURL("src/html/options.html?firstTime=true") });
   }
 });
 
@@ -32,7 +32,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
     
     // Mở trang thiết lập mật khẩu
     chrome.tabs.create({ 
-      url: chrome.runtime.getURL("options.html?firstTime=true"),
+      url: chrome.runtime.getURL("src/html/options.html?firstTime=true"),
       active: true 
     });
   } else if (details.reason === 'update') {
@@ -50,7 +50,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       redirectToLockscreen();
     } else {
       // Không có mật khẩu → mở trang cài đặt
-      chrome.tabs.create({ url: chrome.runtime.getURL("options.html?firstTime=true") });
+      chrome.tabs.create({ url: chrome.runtime.getURL("src/html/options.html?firstTime=true") });
     }
   }
 });
@@ -69,13 +69,13 @@ async function redirectToLockscreen() {
   chrome.tabs.query({}, function (tabs) {
     if (tabs.length > 0) {
       lockscreenTabId = tabs[0].id;
-      chrome.tabs.update(tabs[0].id, { url: chrome.runtime.getURL("lockscreen.html") });
+      chrome.tabs.update(tabs[0].id, { url: chrome.runtime.getURL("src/html/lockscreen.html") });
       // Close all other tabs
       for (let i = 1; i < tabs.length; i++) {
         chrome.tabs.remove(tabs[i].id);
       }
     } else {
-      chrome.tabs.create({ url: chrome.runtime.getURL("lockscreen.html") }, (tab) => {
+      chrome.tabs.create({ url: chrome.runtime.getURL("src/html/lockscreen.html") }, (tab) => {
         lockscreenTabId = tab.id;
       });
     }
@@ -97,7 +97,7 @@ function isBlockedUrl(url) {
   if (!url) return false;
   
   // Allow our own lockscreen
-  if (url.includes('lockscreen.html')) return false;
+  if (url.includes('src/html/lockscreen.html')) return false;
   
   // Block all chrome:// and extension management URLs
   return BLOCKED_URLS.some(blocked => url.startsWith(blocked));
@@ -108,7 +108,7 @@ async function injectContentScript(tabId) {
   try {
     await chrome.scripting.executeScript({
       target: { tabId: tabId },
-      files: ['assets/js/content.js']
+      files: ['src/js/content.js']
     });
   } catch (e) {
     console.log('Cannot inject script:', e);
@@ -119,8 +119,8 @@ async function injectContentScript(tabId) {
 async function checkAndProtectTab(tabId, url) {
   const result = await chrome.storage.local.get(['accessGranted', 'lockerPassword']);
   
-  // Cho phép mở options.html khi chưa có mật khẩu
-  if (!result.lockerPassword && url && url.includes('options.html')) {
+  // Cho phép mở src/html/options.html khi chưa có mật khẩu
+  if (!result.lockerPassword && url && url.includes('src/html/options.html')) {
     return; // Không redirect, cho phép mở trang cài đặt
   }
   
@@ -128,13 +128,13 @@ async function checkAndProtectTab(tabId, url) {
   if (!result.accessGranted) {
     // If trying to access blocked URL, redirect to lockscreen
     if (isBlockedUrl(url)) {
-      chrome.tabs.update(tabId, { url: chrome.runtime.getURL("lockscreen.html") });
+      chrome.tabs.update(tabId, { url: chrome.runtime.getURL("src/html/lockscreen.html") });
       return;
     }
     
     // If not on lockscreen, redirect to lockscreen
-    if (!url.includes('lockscreen.html')) {
-      chrome.tabs.update(tabId, { url: chrome.runtime.getURL("lockscreen.html") });
+    if (!url.includes('src/html/lockscreen.html')) {
+      chrome.tabs.update(tabId, { url: chrome.runtime.getURL("src/html/lockscreen.html") });
       return;
     }
   }
@@ -146,15 +146,15 @@ chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
   
   const result = await chrome.storage.local.get(['accessGranted', 'lockerPassword']);
   
-  // Cho phép navigation đến options.html khi chưa có mật khẩu
-  if (!result.lockerPassword && details.url && details.url.includes('options.html')) {
+  // Cho phép navigation đến src/html/options.html khi chưa có mật khẩu
+  if (!result.lockerPassword && details.url && details.url.includes('src/html/options.html')) {
     return;
   }
   
   if (!result.accessGranted) {
     // Block navigation to any URL except lockscreen
-    if (!details.url.includes('lockscreen.html')) {
-      chrome.tabs.update(details.tabId, { url: chrome.runtime.getURL("lockscreen.html") });
+    if (!details.url.includes('src/html/lockscreen.html')) {
+      chrome.tabs.update(details.tabId, { url: chrome.runtime.getURL("src/html/lockscreen.html") });
     }
   }
 });
@@ -164,8 +164,8 @@ chrome.webNavigation.onCommitted.addListener(async (details) => {
   if (details.frameId !== 0) return; // Only main frame
   
   const result = await chrome.storage.local.get(['lockerPassword']);
-  // Cho phép navigation đến options.html khi chưa có mật khẩu
-  if (!result.lockerPassword && details.url && details.url.includes('options.html')) {
+  // Cho phép navigation đến src/html/options.html khi chưa có mật khẩu
+  if (!result.lockerPassword && details.url && details.url.includes('src/html/options.html')) {
     return;
   }
   
@@ -176,14 +176,14 @@ chrome.webNavigation.onCommitted.addListener(async (details) => {
 chrome.tabs.onCreated.addListener(async (tab) => {
   const result = await chrome.storage.local.get(['accessGranted', 'lockerPassword']);
   
-  // Cho phép mở options.html khi chưa có mật khẩu
-  if (!result.lockerPassword && tab.url && tab.url.includes('options.html')) {
+  // Cho phép mở src/html/options.html khi chưa có mật khẩu
+  if (!result.lockerPassword && tab.url && tab.url.includes('src/html/options.html')) {
     return; // Không redirect, cho phép mở trang cài đặt
   }
   
   if (!result.accessGranted) {
     // Immediately redirect any new tab to lockscreen
-    chrome.tabs.update(tab.id, { url: chrome.runtime.getURL("lockscreen.html") });
+    chrome.tabs.update(tab.id, { url: chrome.runtime.getURL("src/html/lockscreen.html") });
   }
 });
 
@@ -191,16 +191,16 @@ chrome.tabs.onCreated.addListener(async (tab) => {
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   const result = await chrome.storage.local.get(['accessGranted', 'lockerPassword']);
   
-  // Cho phép mở options.html khi chưa có mật khẩu
-  if (!result.lockerPassword && changeInfo.url && changeInfo.url.includes('options.html')) {
+  // Cho phép mở src/html/options.html khi chưa có mật khẩu
+  if (!result.lockerPassword && changeInfo.url && changeInfo.url.includes('src/html/options.html')) {
     return; // Không redirect, cho phép mở trang cài đặt
   }
   
   if (!result.accessGranted) {
     // If URL is changing, check if it should be blocked
     if (changeInfo.url) {
-      if (isBlockedUrl(changeInfo.url) || !changeInfo.url.includes('lockscreen.html')) {
-        chrome.tabs.update(tabId, { url: chrome.runtime.getURL("lockscreen.html") });
+      if (isBlockedUrl(changeInfo.url) || !changeInfo.url.includes('src/html/lockscreen.html')) {
+        chrome.tabs.update(tabId, { url: chrome.runtime.getURL("src/html/lockscreen.html") });
       }
     }
   }
@@ -218,7 +218,7 @@ chrome.tabs.onRemoved.addListener(async (tabId, removeInfo) => {
     
     // If lockscreen tab was closed, create a new one
     if (tabId === lockscreenTabId) {
-      chrome.tabs.create({ url: chrome.runtime.getURL("lockscreen.html") }, (tab) => {
+      chrome.tabs.create({ url: chrome.runtime.getURL("src/html/lockscreen.html") }, (tab) => {
         lockscreenTabId = tab.id;
       });
     }
@@ -227,7 +227,7 @@ chrome.tabs.onRemoved.addListener(async (tabId, removeInfo) => {
     chrome.tabs.query({}, (tabs) => {
       if (tabs.length === 0) {
         // No tabs left, create lockscreen
-        chrome.tabs.create({ url: chrome.runtime.getURL("lockscreen.html") }, (tab) => {
+        chrome.tabs.create({ url: chrome.runtime.getURL("src/html/lockscreen.html") }, (tab) => {
           lockscreenTabId = tab.id;
         });
       }
@@ -258,7 +258,7 @@ setInterval(async () => {
     
     // If no tabs exist, create lockscreen
     if (tabs.length === 0) {
-      chrome.tabs.create({ url: chrome.runtime.getURL("lockscreen.html") }, (tab) => {
+      chrome.tabs.create({ url: chrome.runtime.getURL("src/html/lockscreen.html") }, (tab) => {
         lockscreenTabId = tab.id;
       });
       return;
@@ -269,26 +269,26 @@ setInterval(async () => {
     let hasOptionsPage = false;
     
     for (const tab of tabs) {
-      if (tab.url && tab.url.includes('lockscreen.html')) {
+      if (tab.url && tab.url.includes('src/html/lockscreen.html')) {
         hasLockscreen = true;
         lockscreenTabId = tab.id;
-      } else if (tab.url && tab.url.includes('options.html')) {
+      } else if (tab.url && tab.url.includes('src/html/options.html')) {
         // Nếu chưa có mật khẩu, cho phép giữ trang options
         if (!result.lockerPassword) {
           hasOptionsPage = true;
         } else {
           // Đã có mật khẩu, redirect về lockscreen
-          chrome.tabs.update(tab.id, { url: chrome.runtime.getURL("lockscreen.html") });
+          chrome.tabs.update(tab.id, { url: chrome.runtime.getURL("src/html/lockscreen.html") });
         }
       } else if (tab.url) {
         // Any tab that's not lockscreen or options should be redirected
-        chrome.tabs.update(tab.id, { url: chrome.runtime.getURL("lockscreen.html") });
+        chrome.tabs.update(tab.id, { url: chrome.runtime.getURL("src/html/lockscreen.html") });
       }
     }
     
     // If no lockscreen tab exists and not first time, create one
     if (!hasLockscreen && !hasOptionsPage) {
-      chrome.tabs.create({ url: chrome.runtime.getURL("lockscreen.html") }, (tab) => {
+      chrome.tabs.create({ url: chrome.runtime.getURL("src/html/lockscreen.html") }, (tab) => {
         lockscreenTabId = tab.id;
       });
     }

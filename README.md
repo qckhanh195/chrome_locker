@@ -49,27 +49,29 @@ Due to Chrome's security policies, the extension **CANNOT** prevent users from r
 ## 📁 File Structure
 
 ```
-chrome-locker/
-├── manifest.json
-├── popup.html
-├── lockscreen.html
-├── options.html
-├── assets/
-│   ├── css/
-│   │   ├── popup.css
+├── src
+│   ├── css
 │   │   ├── lockscreen.css
-│   │   └── options.css
-│   ├── js/
-│   │   ├── popup.js
-│   │   ├── lockscreen.js
-│   │   ├── options.js
-│   │   ├── background.js
-│   │   └── content.js
-│   └── icons/
-│       ├── icon16.png
-│       ├── icon48.png
-│       └── icon128.png
-└── README.md
+│   │   ├── options.css
+│   │   └── popup.css
+│   ├── html
+│   │   ├── lockscreen.html
+│   │   ├── options.html
+│   │   └── popup.html
+│   ├── icons
+│   │   ├── icon128.png
+│   │   ├── icon16.png
+│   │   └── icon48.png
+│   └── js
+│       ├── background.js
+│       ├── content.js
+│       ├── lockscreen.js
+│       ├── options.js
+│       └── popup.js
+├── .gitignore
+├── LICENSE
+├── README.md
+└── manifest.json
 ```
 
 ## ⚙️ Configuration

@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
       chrome.tabs.query({}, (tabs) => {
         tabs.forEach(tab => {
           chrome.tabs.update(tab.id, { 
-            url: chrome.runtime.getURL("lockscreen.html") 
+            url: chrome.runtime.getURL("src/html/lockscreen.html") 
           });
         });
       });
@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Open settings
   function openSettings() {
     chrome.tabs.create({ 
-      url: chrome.runtime.getURL("options.html") 
+      url: chrome.runtime.getURL("src/html/options.html") 
     });
     window.close();
   }

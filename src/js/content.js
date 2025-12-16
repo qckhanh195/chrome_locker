@@ -17,8 +17,8 @@
         url.startsWith('about:')) {
       // If we're on a blocked page and locked, redirect immediately
       checkAccessStatus((granted) => {
-        if (!granted && !url.includes('lockscreen.html')) {
-          window.location.href = chrome.runtime.getURL("lockscreen.html");
+        if (!granted && !url.includes('src/html/lockscreen.html')) {
+          window.location.href = chrome.runtime.getURL("src/html/lockscreen.html");
         }
       });
       return false;
@@ -84,7 +84,7 @@
     const btn = overlayElement.querySelector('#lockRedirectBtn');
     if (btn) {
       btn.onclick = () => {
-        window.location.href = chrome.runtime.getURL("lockscreen.html");
+        window.location.href = chrome.runtime.getURL("src/html/lockscreen.html");
       };
     }
     

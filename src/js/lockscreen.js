@@ -546,9 +546,9 @@ document.addEventListener("DOMContentLoaded", () => {
   // Monitor for any attempts to change location
   let originalLocation = window.location.href;
   setInterval(() => {
-    if (window.location.href !== originalLocation && !window.location.href.includes('lockscreen.html')) {
+    if (window.location.href !== originalLocation && !window.location.href.includes('src/html/lockscreen.html')) {
       // If location changed, force back to lockscreen
-      window.location.href = chrome.runtime.getURL("lockscreen.html");
+      window.location.href = chrome.runtime.getURL("src/html/lockscreen.html");
     }
     originalLocation = window.location.href;
   }, 500);
@@ -558,7 +558,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const originalAssign = window.location.assign;
   
   window.location.replace = function(url) {
-    if (!url.includes('lockscreen.html') && !url.includes('chrome://newtab')) {
+    if (!url.includes('src/html/lockscreen.html') && !url.includes('chrome://newtab')) {
       showError("Không thể điều hướng khi trình duyệt đang bị khóa");
       return;
     }
@@ -566,7 +566,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
   
   window.location.assign = function(url) {
-    if (!url.includes('lockscreen.html') && !url.includes('chrome://newtab')) {
+    if (!url.includes('src/html/lockscreen.html') && !url.includes('chrome://newtab')) {
       showError("Không thể điều hướng khi trình duyệt đang bị khóa");
       return;
     }
@@ -575,7 +575,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Prevent navigation via links
   document.addEventListener('click', function(e) {
-    if (e.target.tagName === 'A' && e.target.href && !e.target.href.includes('lockscreen.html')) {
+    if (e.target.tagName === 'A' && e.target.href && !e.target.href.includes('src/html/lockscreen.html')) {
       e.preventDefault();
       e.stopPropagation();
       showError("Không thể điều hướng khi trình duyệt đang bị khóa");
