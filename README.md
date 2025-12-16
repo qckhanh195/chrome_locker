@@ -1,30 +1,40 @@
-# Browser Locker Extension
+# Chrome Locker Extension
 
-Read the [Configuration](#configuration) section before installing and using.
-
-**Chrome Locker Extension v2** has many improvements compared to **version v1 (main)**, but there are still some unresolved limitations ⚠️
+**Chrome Locker Extension v2** - Protect your browser privacy with password authentication
 
 ## 📝 Description
 
-Browser Locker is a simple Chrome Extension designed to protect your privacy by requiring a password for access. The extension acts as an additional security layer for your browser without interfering with normal web browsing activities.
+Chrome Locker is a Chrome Extension designed to protect your privacy by requiring a password when starting the browser. The extension acts as an additional security layer without interfering with normal web browsing activities.
 
 ## ✨ Features
 
-🔐 **Password Protection**: Requires password authentication for access  
-🎨 **Beautiful UI**: Modern design with smooth animations and particle effects  
-📊 **Attempt Tracking**: Display number of failed password attempts  
-🚫 **Shortcut Prevention**: Blocks F12, Ctrl+Shift+I, Ctrl+U in security popup  
-🖱️ **Right-click Protection**: Disables context menu in security popup only  
+🔐 **Password Protection**: Requires password authentication on browser startup  
+🎨 **Beautiful UI**: Modern design with smooth animations  
+⏱️ **Smart Cooldown**: 5-second wait after each wrong attempt (unlimited tries)  
+🚫 **Shortcut Prevention**: Disables F12, Ctrl+Shift+I, Ctrl+U in lockscreen  
+🖱️ **Right-click Protection**: Disables context menu in lockscreen  
 ⚡ **Non-intrusive**: Doesn't interfere with normal website functionality  
 🔄 **Auto Focus**: Automatically focuses on password input field  
-🎯 **Unlimited Attempts**: No lockout mechanism - try as many times as needed
+✅ **First-time Setup**: Automatically opens settings page on first install
 
-## ❗ Important Notes
+## ⚠️ Important Warnings
 
-- This extension is **NOT** a replacement for official security measures
-- Provides basic protection and can be bypassed by experienced users
-- Not intended for protecting sensitive or critical data
-- May not function properly in certain edge cases or browser configurations
+### Security Limitations
+- This extension is **NOT** a professional security solution
+- Can be bypassed by experienced users (e.g., removing extension via `chrome://extensions`)
+- **DO NOT** use to protect sensitive or critical data
+- Only suitable for personal self-control purposes
+
+### Pinned Tabs Will Be Lost
+> **⚠️ WARNING**: When using this extension, **ALL PINNED TABS WILL BE LOST** when reopening the browser!
+> 
+> The extension closes all tabs and only displays the lockscreen on startup. If you frequently use pinned tabs, please consider carefully before installing.
+
+### Cannot Completely Block Extension Removal
+Due to Chrome's security policies, the extension **CANNOT** prevent users from removing it via:
+- Chrome Menu → Extensions → Manage Extensions
+- Right-click extension icon → Manage Extensions
+- Direct access to `chrome://extensions` (blocked but other methods exist)
 
 ## 🛠️ Installation
 
@@ -34,12 +44,12 @@ Browser Locker is a simple Chrome Extension designed to protect your privacy by 
 2. Open Chrome and navigate to `chrome://extensions/`
 3. Enable "Developer mode" in the top right corner
 4. Click "Load unpacked" and select the extension folder
-5. The extension will appear in your extensions list and toolbar
+5. The extension will appear in the list and automatically open the password setup page
 
 ## 📁 File Structure
 
 ```
-chrome-lock-extension/
+chrome-locker/
 ├── manifest.json
 ├── popup.html
 ├── lockscreen.html
@@ -62,30 +72,38 @@ chrome-lock-extension/
 └── README.md
 ```
 
-## ⚙️ Configuration <a name="configuration"></a>
+## ⚙️ Configuration
 
-### Change Default Password
+### First-time Password Setup
 
-The default password is `123456`. To change it:
+When installing the extension for the first time:
+1. The settings page will automatically open
+2. Enter your new password and confirm
+3. Click "Save Changes"
+4. Browser will automatically exit after 3 seconds
+5. Reopen browser → Enter password to use
 
-1. Open Chrome DevTools (F12)
-2. Go to Console tab
-3. Run the command:
+### Change Password
 
-```javascript
-chrome.storage.local.set({ lockerPassword: "your_new_password" });
-```
-
-### Alternative Method via Options Page
-
+**Method 1: Via Options Page**
 1. Right-click the extension icon
 2. Select "Options"
-3. Enter your new password
-4. Click "Save"
+3. Enter current password
+4. Enter new password and confirm
+5. Click "Save Changes"
+
+**Method 2: Via Console (if password forgotten)**
+1. Open DevTools (F12)
+2. Go to Console tab
+3. Run command:
+
+```javascript
+chrome.storage.local.set({ lockerPassword: "new_password" });
+```
 
 ### Reset Extension
 
-To reset to initial state:
+To reset to initial state (clear password):
 
 ```javascript
 chrome.storage.local.clear();
@@ -93,63 +111,42 @@ chrome.storage.local.clear();
 
 ## 🎮 Usage
 
-1. **Activation**: Click the Browser Locker icon in your toolbar
-2. **Enter Password**: Type your password in the popup that appears
-3. **Access Granted**: After correct password entry, popup closes and normal browsing resumes
-4. **Security Features**: The popup blocks common shortcuts and right-click for enhanced security
-
-## 🔧 Customization
-
-### Modify Interface
-
-Edit `popup.css` and related files to customize:
-
-- Color schemes and themes
-- Font families and sizes
-- Animation effects and transitions
-- Popup dimensions and layout
-
-### Add Features
-
-Modify `popup.js` to:
-
-- Add new authentication logic
-- Customize success/error messages
-- Change post-authentication behavior
-- Implement additional security measures
+1. **Browser Startup**: Lockscreen will automatically display
+2. **Enter Password**: Type your password
+3. **Access Granted**: After correct entry, redirects to new tab
+4. **Wrong Entry**: Must wait 5 seconds before trying again
 
 ## 🛡️ Security Features
 
 ✅ **Secure Storage**: Uses Chrome Storage API (not plain text)  
 ✅ **Local Only**: No data sent to external servers  
-✅ **Limited Scope**: Only affects extension popup, not web pages  
+✅ **Limited Scope**: Only affects extension, not web pages  
 ✅ **Basic Bypass Protection**: Disables common developer shortcuts  
-✅ **Right-click Protection**: Context menu disabled in security popup  
+✅ **Right-click Protection**: Context menu disabled in lockscreen  
 ✅ **Focus Management**: Prevents easy navigation away from password field
 
 ## 🐛 Troubleshooting
 
-### Popup Not Displaying
-
-- Check if extension is enabled in `chrome://extensions/`
-- Try disabling and re-enabling the extension
-- Check browser console for errors (F12)
-
 ### Forgot Password
 
-- Open DevTools and run:  
-  `chrome.storage.local.get(['lockerPassword'], console.log)`
-- Or reset to default:  
-  `chrome.storage.local.set({ lockerPassword: "123456" })`
+**Method 1: View current password**
+```javascript
+chrome.storage.local.get(['lockerPassword'], console.log)
+```
+
+**Method 2: Set new password**
+```javascript
+chrome.storage.local.set({ lockerPassword: "new_password" });
+```
 
 ### Extension Not Working
 
-- Verify Manifest V3 compatibility
-- Check Chrome Extensions page for errors
-- Try reloading the extension
-- Ensure all required permissions are granted
+- Check if extension is enabled in `chrome://extensions/`
+- Try disabling and re-enabling the extension
+- Check console for errors (F12)
+- Reload the extension
 
-### Lock Screen Issues
+### Lockscreen Not Showing
 
 - Clear browser cache and cookies
 - Check if content script is properly injected
@@ -158,8 +155,10 @@ Modify `popup.js` to:
 ## 🔒 Permissions Explained
 
 - **storage**: Store password and settings locally
-- **tabs**: Manage browser tabs (if needed)
+- **tabs**: Manage browser tabs
 - **activeTab**: Access current tab information
+- **webNavigation**: Monitor navigation events
+- **scripting**: Inject content scripts
 
 ## 🤝 Contributing
 
@@ -209,7 +208,7 @@ All contributions are welcome!
 
 > 😄 Thank you for your interest and support. 💖
 >
-> ✨ This extension was created with the companionship and efforts of my assistant — claude.ai :D
+> ✨ This extension was created with the companionship and efforts of my AI assistant — claude.ai :D
 
 <p align="center">
   🚀 <b>Built with Vibe Code</b> 🤖

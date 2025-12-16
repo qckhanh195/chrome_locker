@@ -1,4 +1,4 @@
-// Content.js - Only active when locked, completely inactive when unlocked
+// Content.js - Enhanced security with immediate blocking
 (function() {
   'use strict';
 
@@ -15,6 +15,12 @@
     if (url.startsWith('chrome-extension://') || 
         url.startsWith('chrome://') ||
         url.startsWith('about:')) {
+      // If we're on a blocked page and locked, redirect immediately
+      checkAccessStatus((granted) => {
+        if (!granted && !url.includes('lockscreen.html')) {
+          window.location.href = chrome.runtime.getURL("lockscreen.html");
+        }
+      });
       return false;
     }
     return true;
@@ -113,12 +119,20 @@
         { ctrl: true, shift: true, key: 'I' },
         { ctrl: true, shift: true, key: 'J' },
         { ctrl: true, key: 'U' },
+        { ctrl: true, key: 'T' }, // New tab
+        { ctrl: true, key: 'N' }, // New window
+        { ctrl: true, key: 'W' }, // Close tab
+        { alt: true, key: 'F4' }, // Close window
+        { alt: true, key: 'Home' }, // Home
+        { ctrl: true, key: 'L' }, // Address bar
+        { ctrl: true, key: 'K' }, // Address bar (alternate)
       ];
       
       const isBlocked = blocked.some(s => {
         return (!s.ctrl || e.ctrlKey) &&
                (!s.shift || e.shiftKey) &&
-               (e.key === s.key);
+               (!s.alt || e.altKey) &&
+               (e.key === s.key || e.key === s.key.toLowerCase());
       });
       
       if (isBlocked) {
@@ -135,6 +149,13 @@
       return false;
     };
     document.addEventListener('selectstart', selectHandler);
+    
+    // Prevent navigation
+    window.addEventListener('beforeunload', function(e) {
+      e.preventDefault();
+      e.returnValue = '';
+      return '';
+    });
   }
   
   // Deactivate lock mode - RESTORE EVERYTHING

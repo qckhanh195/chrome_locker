@@ -264,45 +264,73 @@ document.addEventListener("DOMContentLoaded", () => {
     hideError();
 
     chrome.storage.local.get(["lockerPassword", "failedAttempts"], (result) => {
-      const correctPassword = result.lockerPassword || "123456";
+      const correctPassword = result.lockerPassword;
       const currentAttempts = result.failedAttempts || 0;
 
+      // Kiểm tra nếu chưa có mật khẩu (lần đầu cài đặt)
+      if (!correctPassword) {
+        showError("Vui lòng thiết lập mật khẩu lần đầu trong trang Cài đặt");
+        isProcessing = false;
+        lockContainer.classList.remove("loading");
+        return;
+      }
+
       if (enteredPassword === correctPassword) {
-        // Success - show popup instead of browser confirmation
-        chrome.storage.local.set({ accessGranted: true, failedAttempts: 0 }, () => {
-          chrome.runtime.sendMessage({ action: "resetFailedAttempts" });
-
-          // Success animation for container
-          lockContainer.style.background = "rgba(40, 167, 69, 0.95)";
-          lockContainer.style.color = "white";
-          unlockBtn.innerHTML = "✅ Thành Công!";
-
-          // Show custom success popup
-          showSuccessPopup();
+        // Success - popup.js style animation
+        chrome.storage.local.set({ accessGranted: true }, () => {
+          // Change button style like popup.js
+          unlockBtn.innerHTML = "✅ Thành công!";
+          unlockBtn.style.background = "linear-gradient(135deg, #2ed573, #17c0eb)";
+          unlockBtn.style.transform = "scale(1.05)";
+          unlockBtn.style.transition = "all 0.3s ease";
+          
+          passwordInput.value = "";
+          errorMessage.style.display = "none";
+          
+          // Show success message
+          const successMsg = document.createElement('div');
+          successMsg.style.cssText = `
+            color: #2ed573;
+            font-size: 1rem;
+            margin-top: 15px;
+            font-weight: 500;
+          `;
+          successMsg.textContent = "✅ Mở khóa thành công!";
+          lockContainer.appendChild(successMsg);
+          
+          // Redirect after 1.5 seconds
+          setTimeout(() => {
+            chrome.tabs.update({ url: "chrome://newtab" });
+          }, 1500);
         });
       } else {
-        // Failed attempt
-        const newAttempts = currentAttempts + 1;
+        // Failed attempt - apply 5 second cooldown
+        showError("Mật khẩu không chính xác. Vui lòng đợi 5 giây...");
         
-        // Kiểm tra nếu đã đạt giới hạn 5 lần
-        if (newAttempts >= MAX_ATTEMPTS) {
-          // Lưu trạng thái khóa và hiển thị thông báo thoát
-          chrome.storage.local.set({ 
-            failedAttempts: newAttempts,
-            lockoutTime: Date.now() + (5 * 60 * 1000) // 5 phút (không dùng nữa nhưng để tương thích)
-          }, () => {
-            showLockoutMessage();
-          });
-        } else {
-          // Vẫn còn lần thử
-          chrome.storage.local.set({ failedAttempts: newAttempts }, () => {
-            showError("Mật khẩu không chính xác");
-            updateAttemptsCounter(newAttempts);
-            
+        // Disable input and button for 5 seconds
+        passwordInput.disabled = true;
+        unlockBtn.disabled = true;
+        isProcessing = true;
+        
+        let countdown = 5;
+        attemptsCounter.textContent = `⏱️ Đợi ${countdown} giây...`;
+        attemptsCounter.style.color = "#dc3545";
+        
+        const countdownInterval = setInterval(() => {
+          countdown--;
+          if (countdown > 0) {
+            attemptsCounter.textContent = `⏱️ Đợi ${countdown} giây...`;
+          } else {
+            clearInterval(countdownInterval);
+            attemptsCounter.textContent = "";
+            passwordInput.disabled = false;
+            unlockBtn.disabled = false;
+            passwordInput.value = "";
+            passwordInput.focus();
             isProcessing = false;
             lockContainer.classList.remove("loading");
-          });
-        }
+          }
+        }, 1000);
       }
     });
   }
@@ -417,4 +445,143 @@ document.addEventListener("DOMContentLoaded", () => {
   // Prevent drag and drop
   document.addEventListener("dragover", (e) => e.preventDefault());
   document.addEventListener("drop", (e) => e.preventDefault());
+
+  // ========== ENHANCED SECURITY: PREVENT NAVIGATION ==========
+  
+  // Prevent back/forward navigation
+  window.history.pushState(null, null, window.location.href);
+  window.addEventListener('popstate', function(event) {
+    window.history.pushState(null, null, window.location.href);
+  });
+
+  // Prevent navigation (removed alert to allow smooth exit)
+  // window.addEventListener('beforeunload', function(e) {
+  //   e.preventDefault();
+  //   e.returnValue = '';
+  //   return '';
+  // });
+
+  // Block ALL navigation attempts via keyboard
+  document.addEventListener('keydown', function(e) {
+    // Block Alt+Left (Back), Alt+Right (Forward)
+    if (e.altKey && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
+      e.preventDefault();
+      e.stopPropagation();
+      showError("Không thể điều hướng khi trình duyệt đang bị khóa");
+      return false;
+    }
+    
+    // Block Backspace (Back navigation when not in input)
+    if (e.key === 'Backspace' && document.activeElement !== passwordInput) {
+      e.preventDefault();
+      e.stopPropagation();
+      return false;
+    }
+    
+    // Block Alt+Home
+    if (e.altKey && e.key === 'Home') {
+      e.preventDefault();
+      e.stopPropagation();
+      showError("Không thể truy cập trang chủ khi trình duyệt đang bị khóa");
+      return false;
+    }
+    
+    // Block Ctrl+L, Ctrl+K (Address bar)
+    if (e.ctrlKey && (e.key === 'l' || e.key === 'L' || e.key === 'k' || e.key === 'K')) {
+      e.preventDefault();
+      e.stopPropagation();
+      showError("Thanh địa chỉ đã bị vô hiệu hóa");
+      return false;
+    }
+    
+    // Block Ctrl+T (New tab)
+    if (e.ctrlKey && (e.key === 't' || e.key === 'T')) {
+      e.preventDefault();
+      e.stopPropagation();
+      showError("Không thể mở tab mới khi trình duyệt đang bị khóa");
+      return false;
+    }
+    
+    // Block Ctrl+N (New window)
+    if (e.ctrlKey && (e.key === 'n' || e.key === 'N')) {
+      e.preventDefault();
+      e.stopPropagation();
+      showError("Không thể mở cửa sổ mới khi trình duyệt đang bị khóa");
+      return false;
+    }
+    
+    // Block Ctrl+W, Ctrl+F4 (Close tab)
+    if ((e.ctrlKey && (e.key === 'w' || e.key === 'W')) || 
+        (e.ctrlKey && e.key === 'F4')) {
+      e.preventDefault();
+      e.stopPropagation();
+      showError("Không thể đóng tab khi trình duyệt đang bị khóa");
+      return false;
+    }
+    
+    // Block Alt+F4 (Close window)
+    if (e.altKey && e.key === 'F4') {
+      e.preventDefault();
+      e.stopPropagation();
+      showError("Không thể đóng cửa sổ khi trình duyệt đang bị khóa");
+      return false;
+    }
+    
+    // Block F5, Ctrl+R (Refresh - allow this for lockscreen)
+    // We allow refresh so user can retry if page has issues
+    
+    // Block Ctrl+Shift+T (Reopen closed tab)
+    if (e.ctrlKey && e.shiftKey && (e.key === 't' || e.key === 'T')) {
+      e.preventDefault();
+      e.stopPropagation();
+      return false;
+    }
+  }, true); // Use capture phase to catch before other handlers
+
+  // Removed beforeunload alert to allow smooth exit
+  // window.onbeforeunload = function() {
+  //   return "Đang khóa trình duyệt...";
+  // };
+
+  // Monitor for any attempts to change location
+  let originalLocation = window.location.href;
+  setInterval(() => {
+    if (window.location.href !== originalLocation && !window.location.href.includes('lockscreen.html')) {
+      // If location changed, force back to lockscreen
+      window.location.href = chrome.runtime.getURL("lockscreen.html");
+    }
+    originalLocation = window.location.href;
+  }, 500);
+
+  // Prevent any form of navigation via window.location
+  const originalReplace = window.location.replace;
+  const originalAssign = window.location.assign;
+  
+  window.location.replace = function(url) {
+    if (!url.includes('lockscreen.html') && !url.includes('chrome://newtab')) {
+      showError("Không thể điều hướng khi trình duyệt đang bị khóa");
+      return;
+    }
+    originalReplace.call(window.location, url);
+  };
+  
+  window.location.assign = function(url) {
+    if (!url.includes('lockscreen.html') && !url.includes('chrome://newtab')) {
+      showError("Không thể điều hướng khi trình duyệt đang bị khóa");
+      return;
+    }
+    originalAssign.call(window.location, url);
+  };
+
+  // Prevent navigation via links
+  document.addEventListener('click', function(e) {
+    if (e.target.tagName === 'A' && e.target.href && !e.target.href.includes('lockscreen.html')) {
+      e.preventDefault();
+      e.stopPropagation();
+      showError("Không thể điều hướng khi trình duyệt đang bị khóa");
+      return false;
+    }
+  }, true);
+
+  console.log('Chrome Lock - Enhanced Security Active');
 });

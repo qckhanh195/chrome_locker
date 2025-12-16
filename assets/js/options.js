@@ -7,6 +7,27 @@ document.addEventListener("DOMContentLoaded", () => {
   const messageArea = document.getElementById("messageArea");
 
   let isProcessing = false;
+  let isFirstTime = false; // Đánh dấu lần đầu thiết lập mật khẩu
+
+  // Kiểm tra xem có phải lần đầu cài đặt không - kiểm tra trong storage
+  chrome.storage.local.get(['lockerPassword'], (result) => {
+    if (!result.lockerPassword) {
+      // Chưa có mật khẩu - là lần đầu
+      isFirstTime = true;
+      // Ẩn trường mật khẩu cũ khi lần đầu
+      const oldPasswordGroup = oldPasswordInput.closest('.input-group');
+      if (oldPasswordGroup) {
+        oldPasswordGroup.style.display = 'none';
+      }
+      // Bỏ required attribute để form có thể submit
+      oldPasswordInput.removeAttribute('required');
+      // Thay đổi tiêu đề
+      document.querySelector('.header h2').textContent = 'Thiết Lập Mật Khẩu Lần Đầu';
+      document.querySelector('.header .subtitle').textContent = 'Vui lòng tạo mật khẩu bảo mật cho Chrome Lock';
+      
+      alert('Chưa có mật khẩu! Vui lòng thiết lập mật khẩu bảo mật.');
+    }
+  });
 
   // Create animated background particles
   function createParticles() {
@@ -88,7 +109,9 @@ document.addEventListener("DOMContentLoaded", () => {
   function handleSubmit(e) {
     e.preventDefault();
 
-    if (isProcessing) return;
+    if (isProcessing) {
+      return;
+    }
 
     const oldPass = oldPasswordInput.value.trim();
     const newPass = newPasswordInput.value.trim();
@@ -97,8 +120,14 @@ document.addEventListener("DOMContentLoaded", () => {
     clearMessages();
 
     // Validation
-    if (!oldPass || !newPass || !confirmPass) {
+    if (!newPass || !confirmPass) {
       showMessage("⚠️ Vui lòng nhập đầy đủ thông tin");
+      return;
+    }
+
+    // Kiểm tra mật khẩu cũ chỉ khi không phải lần đầu
+    if (!isFirstTime && !oldPass) {
+      showMessage("⚠️ Vui lòng nhập mật khẩu hiện tại");
       return;
     }
 
@@ -108,7 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    if (oldPass === newPass) {
+    if (!isFirstTime && oldPass === newPass) {
       showMessage("⚠️ Mật khẩu mới phải khác mật khẩu hiện tại");
       newPasswordInput.focus();
       return;
@@ -128,24 +157,30 @@ document.addEventListener("DOMContentLoaded", () => {
     saveBtn.textContent = "🔄 Đang xử lý...";
     saveBtn.disabled = true;
 
-    // Check current password
-    chrome.storage.local.get("lockerPassword", (result) => {
-      const currentPassword = result.lockerPassword || "123456";
+    // Check current password (chỉ khi đã có mật khẩu)
+    chrome.storage.local.get(["lockerPassword"], (result) => {
+      const currentPassword = result.lockerPassword;
 
-      if (oldPass !== currentPassword) {
-        showMessage("❌ Mật khẩu hiện tại không đúng!");
-        oldPasswordInput.focus();
+      // Nếu đã có mật khẩu, kiểm tra mật khẩu cũ
+      if (currentPassword && !isFirstTime) {
+        if (oldPass !== currentPassword) {
+          showMessage("❌ Mật khẩu hiện tại không đúng!");
+          oldPasswordInput.focus();
 
-        // Reset processing state
-        isProcessing = false;
-        document.querySelector(".container").classList.remove("loading");
-        saveBtn.textContent = "💾 Lưu Thay Đổi";
-        saveBtn.disabled = false;
-        return;
+          // Reset processing state
+          isProcessing = false;
+          document.querySelector(".container").classList.remove("loading");
+          saveBtn.textContent = "💾 Lưu Thay Đổi";
+          saveBtn.disabled = false;
+          return;
+        }
       }
 
-      // Save new password
-      chrome.storage.local.set({ lockerPassword: newPass }, () => {
+      // Save new password và set accessGranted = false để kích hoạt bảo vệ
+      chrome.storage.local.set({ 
+        lockerPassword: newPass,
+        accessGranted: false // Kích hoạt bảo vệ sau khi có mật khẩu
+      }, () => {
         showMessage("✅ Đã lưu mật khẩu mới thành công!", "success");
 
         // Clear form
@@ -159,17 +194,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const updateCountdown = () => {
           countdownMessage.innerHTML = `
-            🚀 Sẽ tự động đóng extension sau ${countdown} giây...<br>
-            <small>Bạn có thể đóng tab này bất kỳ lúc nào</small>
+            🚀 Đang thoát trình duyệt sau ${countdown} giây...<br>
+            <small>Mật khẩu đã được lưu thành công</small>
           `;
 
           if (countdown <= 0) {
-            // Close current tab or window
-            try {
-              chrome.runtime.sendMessage({ action: "closeOptionsTab" });
-            } catch (e) {
-              window.close();
-            }
+            // Thoát trình duyệt
+            exitBrowser();
             return;
           }
 
@@ -186,12 +217,6 @@ document.addEventListener("DOMContentLoaded", () => {
         saveBtn.textContent = "✅ Đã Hoàn Thành";
         saveBtn.style.background =
           "linear-gradient(135deg, #2ed573 0%, #17c0eb 100%)";
-
-        // Re-enable after delay
-        setTimeout(() => {
-          saveBtn.textContent = "💾 Lưu Thay Đổi";
-          saveBtn.disabled = false;
-        }, 3000);
       });
     });
   }
@@ -246,6 +271,29 @@ document.addEventListener("DOMContentLoaded", () => {
     e.preventDefault();
   });
 
+  // Exit browser function
+  function exitBrowser() {
+    try {
+      // Đóng tất cả tab
+      chrome.tabs.query({}, (tabs) => {
+        const tabIds = tabs.map(tab => tab.id);
+        chrome.tabs.remove(tabIds, () => {
+          // Sau khi đóng tất cả tab, đóng cửa sổ
+          chrome.windows.getCurrent((window) => {
+            chrome.windows.remove(window.id);
+          });
+        });
+      });
+    } catch (error) {
+      console.error("Không thể thoát trình duyệt:", error);
+      window.close();
+    }
+  }
+
   // Focus first input
-  oldPasswordInput.focus();
+  if (isFirstTime) {
+    newPasswordInput.focus();
+  } else {
+    oldPasswordInput.focus();
+  }
 });

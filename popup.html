@@ -1,56 +1,36 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="assets/css/popup.css">
-  <title>Chrome Lock</title>
+  <title>Chrome Locker</title>
 </head>
 <body>
-  <div class="popup-container">
+  <div class="container">
     <div class="header">
-      <div class="logo">🔒</div>
-      <div class="title">Chrome Lock</div>
-      <div class="subtitle">Bảo vệ trình duyệt của bạn</div>
+      <div class="icon">🔒</div>
+      <h2>Chrome Locker</h2>
+      <div class="status">
+        <span class="status-dot" id="statusDot"></span>
+        <span class="status-text" id="statusText">Browser Status</span>
+      </div>
     </div>
 
-    <div class="status-section">
-      <div class="status-indicator">
-        <div id="statusDot" class="status-dot status-locked"></div>
-        <span id="statusText">Trình duyệt đang bị khóa</span>
-      </div>
-      <div id="lockoutInfo" class="hidden" style="font-size: 0.8rem; opacity: 0.8;"></div>
-    </div>
-
-    <div id="unlockSection">
-      <div class="input-group">
-        <label class="input-label" for="password">Mật khẩu</label>
-        <input 
-          type="password" 
-          id="password" 
-          class="password-input"
-          placeholder="Nhập mật khẩu để mở khóa..." 
-          autofocus
-        />
-      </div>
-
-      <div class="button-group">
-        <button id="unlockBtn" class="btn btn-primary">
-          🔓 Mở Khóa
-        </button>
-        <button id="lockBtn" class="btn btn-secondary">
-          🔒 Khóa Ngay
-        </button>
-        <button id="settingsBtn" class="btn btn-settings">
-          ⚙️ Cài Đặt
-        </button>
-      </div>
+    <div class="actions">
+      <button id="lockBtn" class="action-btn lock-btn">
+        🔒 Lock Browser
+      </button>
+      
+      <button id="settingsBtn" class="action-btn settings-btn">
+        ⚙️ Settings
+      </button>
     </div>
 
     <div id="messageArea"></div>
 
     <div class="footer">
-      <div class="version">v2.0 - Enhanced Security</div>
+      🔐 Chrome Locker Extension v2.0
     </div>
   </div>
 
