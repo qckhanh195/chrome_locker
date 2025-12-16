@@ -1,33 +1,54 @@
 {
   "manifest_version": 3,
-  "name": "Chrome Password Locker",
-  "version": "1.0",
-  "description": "Khoá Chrome!! by qckhanh195@gmail.com",
-  "permissions": ["storage", "tabs", "scripting", "webNavigation"],
-  "background": {
-    "service_worker": "background.js"
-  },
-  "options_page": "options.html",
-  "host_permissions": ["<all_urls>"],
-  "web_accessible_resources": [
-    {
-      "resources": ["background.png", "background_option.png", "icons/icon128.png"],
-      "matches": ["<all_urls>"]
-    }
+  "name": "Chrome Lock - Enhanced Security",
+  "version": "2.0",
+  "description": "Advanced browser lock extension with enhanced security features",
+  "permissions": [
+    "storage",
+    "tabs",
+    "webNavigation",
+    "contextMenus",
+    "activeTab",
+    "scripting"
   ],
-  "icons": {
-    "16": "icons/icon16.png",
-    "48": "icons/icon48.png",
-    "128": "icons/icon128.png"
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
+  "background": {
+    "service_worker": "src/js/background.js"
   },
   "action": {
+    "default_popup": "src/html/popup.html",
+    "default_title": "Chrome Lock",
     "default_icon": {
-      "16": "icons/icon16.png",
-      "48": "icons/icon48.png",
-      "128": "icons/icon128.png"
-    },
-    "default_title": "Khóa trình duyệt",
-    "default_popup": "popup.html"
+      "16": "src/icons/icon16.png",
+      "48": "src/icons/icon48.png",
+      "128": "src/icons/icon128.png"
+    }
+  },
+  "options_page": "src/html/options.html",
+  "icons": {
+    "16": "src/icons/icon16.png",
+    "48": "src/icons/icon48.png",
+    "128": "src/icons/icon128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "src/html/lockscreen.html",
+        "src/html/options.html",
+        "src/html/popup.html",
+        "src/css/*.css",
+        "src/js/*.js",
+        "src/icons/*.png"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
   }
 }
-

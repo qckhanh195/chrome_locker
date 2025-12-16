@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../css/options.css">
+  <title>Chrome Lock - Thay Đổi Mật Khẩu</title>
+</head>
+
+<body>
+  <!-- Animated background -->
+  <div class="particles" id="particles"></div>
+
+  <div class="container">
+    <div class="header">
+      <div class="icon">⚙️</div>
+      <h2>Thay Đổi Mật Khẩu</h2>
+      <p class="subtitle">Cập nhật mật khẩu bảo mật cho Chrome Lock</p>
+    </div>
+
+    <form id="passwordForm">
+      <div class="input-group">
+        <label class="input-label" for="oldPassword">Mật khẩu hiện tại</label>
+        <div class="password-wrapper">
+          <input 
+            type="password" 
+            id="oldPassword" 
+            placeholder="Nhập mật khẩu hiện tại..." 
+            autocomplete="current-password" 
+            required
+          />
+          <span class="toggle-password" data-target="oldPassword">👀</span>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label class="input-label" for="newPassword">Mật khẩu mới</label>
+        <div class="password-wrapper">
+          <input 
+            type="password" 
+            id="newPassword" 
+            placeholder="Nhập mật khẩu mới..." 
+            autocomplete="new-password" 
+            required
+          />
+          <span class="toggle-password" data-target="newPassword">👀</span>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label class="input-label" for="confirmPassword">Xác nhận mật khẩu</label>
+        <div class="password-wrapper">
+          <input 
+            type="password" 
+            id="confirmPassword" 
+            placeholder="Nhập lại mật khẩu mới..." 
+            autocomplete="new-password" 
+            required
+          />
+          <span class="toggle-password" data-target="confirmPassword">👀</span>
+        </div>
+      </div>
+
+      <button type="submit" id="saveBtn" class="save-btn">
+        💾 Lưu Thay Đổi
+      </button>
+    </form>
+
+    <div id="messageArea"></div>
+
+    <div class="footer">
+      🔒 Chrome Lock Extension v2.0<br>
+      Bảo mật trình duyệt của bạn
+    </div>
+  </div>
+
+  <script src="../js/options.js"></script>
+</body>
+
+</html>

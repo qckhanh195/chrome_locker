@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../css/lockscreen.css">
+  <title>Khóa Chrome - Bảo Mật</title>
+</head>
+<body>
+  <!-- Animated background -->
+  <div class="particles" id="particles"></div>
+
+  <div class="lock-container" id="lockContainer">
+    <div class="lock-icon">🔒</div>
+    <h1 class="title">Trình Duyệt Đã Được Khóa</h1>
+    <p class="subtitle">Nhập mật khẩu để tiếp tục sử dụng</p>
+    
+    <div class="input-group">
+      <input 
+        type="password" 
+        id="password" 
+        class="password-input"
+        placeholder="Nhập mật khẩu..." 
+        autofocus 
+        tabindex="1"
+        autocomplete="off"
+        spellcheck="false"
+      />
+    </div>
+    
+    <div class="button-group">
+      <button id="unlockBtn" class="btn btn-primary">
+        🔓 Mở Khóa
+      </button>
+    </div>
+    
+    <div id="errorMessage" class="error-message" style="display: none;"></div>
+    <div id="lockoutMessage" class="lockout-message" style="display: none;"></div>
+    <div id="attemptsCounter" class="attempts-counter"></div>
+  </div>
+
+  <div class="security-notice">
+    🛡️ Browser được bảo vệ bởi Chrome Lock Extension
+  </div>
+
+  <script src="../js/lockscreen.js"></script>
+</body>
+</html>

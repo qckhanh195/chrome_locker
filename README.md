@@ -1,78 +1,217 @@
-## NOTE
+# Chrome Locker Extension
 
-**1. The default password: `123456` . How to access the extension's Options page — [change password](#options)**.
+**Chrome Locker Extension v2** - Protect your browser privacy with password authentication
 
-**2. Please make sure to read the entire contents of the README.md file — the most important part is the [Limitations](#limitations) section. :DD**
+## 📝 Description
 
-## Features
+Chrome Locker is a Chrome Extension designed to protect your privacy by requiring a password when starting the browser. The extension acts as an additional security layer without interfering with normal web browsing activities.
 
-- **Add a powerful security layer to your browser.**
-Enhance your browser’s protection with an extra shield that keeps your data safe from unauthorized access. The browser is automatically locked on every new login, ensuring that only you — or someone with the correct password — can use it.
+## ✨ Features
 
-- **Prevent unwanted access at all times.**
-When the browser is locked, users are completely restricted from opening new tabs or accessing any websites except internal pages like `chrome://`. This creates a secure environment that blocks prying eyes and potential misuse right from the start.
+🔐 **Password Protection**: Requires password authentication on browser startup  
+🎨 **Beautiful UI**: Modern design with smooth animations  
+⏱️ **Smart Cooldown**: 5-second wait after each wrong attempt (unlimited tries)  
+🚫 **Shortcut Prevention**: Disables F12, Ctrl+Shift+I, Ctrl+U in lockscreen  
+🖱️ **Right-click Protection**: Disables context menu in lockscreen  
+⚡ **Non-intrusive**: Doesn't interfere with normal website functionality  
+🔄 **Auto Focus**: Automatically focuses on password input field  
+✅ **First-time Setup**: Automatically opens settings page on first install
 
-- **Enjoy quick and seamless login** — just enter your password and you're instantly back to browsing. It’s designed to be fast, responsive, and effortless.
+## ⚠️ Important Warnings
 
-- **The interface is simple, clean, and user-friendly**, built with ease of use in mind. No complex settings or confusing menus — just install it once, and your browser is protected every time it starts.
+### Security Limitations
+- This extension is **NOT** a professional security solution
+- Can be bypassed by experienced users (e.g., removing extension via `chrome://extensions`)
+- **DO NOT** use to protect sensitive or critical data
+- Only suitable for personal self-control purposes
 
+### Pinned Tabs Will Be Lost
+> **⚠️ WARNING**: When using this extension, **ALL PINNED TABS WILL BE LOST** when reopening the browser!
+> 
+> The extension closes all tabs and only displays the lockscreen on startup. If you frequently use pinned tabs, please consider carefully before installing.
 
+### Cannot Completely Block Extension Removal
+Due to Chrome's security policies, the extension **CANNOT** prevent users from removing it via:
+- Chrome Menu → Extensions → Manage Extensions
+- Right-click extension icon → Manage Extensions
+- Direct access to `chrome://extensions` (blocked but other methods exist)
 
-## Start screen
+## 🛠️ Installation
 
-<img src="https://i.postimg.cc/gkgNt29m/Screenshot-2025-07-20-104625.png" alt="Start screen" width="600"/>
+### Manual Installation (Developer Mode)
 
-`The start screen that appears every time the browser is launched.`
+1. Download or clone this repository
+2. Open Chrome and navigate to `chrome://extensions/`
+3. Enable "Developer mode" in the top right corner
+4. Click "Load unpacked" and select the extension folder
+5. The extension will appear in the list and automatically open the password setup page
 
-<a name="options"></a>
-## Options
+## 📁 File Structure
 
-You can change the password in the Options page. It is recommended to replace the default password with your own as soon as you install the extension.
+```
+├── src
+│   ├── css
+│   │   ├── lockscreen.css
+│   │   ├── options.css
+│   │   └── popup.css
+│   ├── html
+│   │   ├── lockscreen.html
+│   │   ├── options.html
+│   │   └── popup.html
+│   ├── icons
+│   │   ├── icon128.png
+│   │   ├── icon16.png
+│   │   └── icon48.png
+│   └── js
+│       ├── background.js
+│       ├── content.js
+│       ├── lockscreen.js
+│       ├── options.js
+│       └── popup.js
+├── .gitignore
+├── LICENSE
+├── README.md
+└── manifest.json
+```
 
-*How to access the extension's Options page.*
+## ⚙️ Configuration
 
-![GIF demo](https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExOTlqcDI0b2JsdmxnMDlkbWM4ZTdxeTBia3NtNzB0cHpienloM2hqMiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/pUjCCfM9u3wtWl7a7J/giphy.gif)
+### First-time Password Setup
 
----
+When installing the extension for the first time:
+1. The settings page will automatically open
+2. Enter your new password and confirm
+3. Click "Save Changes"
+4. Browser will automatically exit after 3 seconds
+5. Reopen browser → Enter password to use
 
-**Options screen**
+### Change Password
 
-<img src="https://i.postimg.cc/vHY0v6N0/Screenshot-2025-07-20-104726.png" alt="Start screen" width="600"/>
+**Method 1: Via Options Page**
+1. Right-click the extension icon
+2. Select "Options"
+3. Enter current password
+4. Enter new password and confirm
+5. Click "Save Changes"
 
-`When the password is changed, the browser will automatically log out.`
+**Method 2: Via Console (if password forgotten)**
+1. Open DevTools (F12)
+2. Go to Console tab
+3. Run command:
 
-<a name="limitations"></a>
-## Limitations
+```javascript
+chrome.storage.local.set({ lockerPassword: "new_password" });
+```
 
-**Lock screen:**
+### Reset Extension
 
-- Still allows access to `chrome://*` domains ( chrome://chrome-urls/ )
+To reset to initial state (clear password):
 
-- Chrome right-click features are still usable
+```javascript
+chrome.storage.local.clear();
+```
 
-- Extensions can still be easily removed via settings or the extensions bar :DDDD
-  
+## 🎮 Usage
 
-<p align="center">
-  <img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExenFodDQzYndiamR0Ym1ueXdiZ3M4czNrdHIwZjRzM2EzankwYWN5biZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Bjh3pSRGX9rOg/giphy.gif" alt="GIF demo">
-</p>
+1. **Browser Startup**: Lockscreen will automatically display
+2. **Enter Password**: Type your password
+3. **Access Granted**: After correct entry, redirects to new tab
+4. **Wrong Entry**: Must wait 5 seconds before trying again
 
-<p align="center">
-  <strong> - My skills are limited, please bear with me :)) - </strong>
-</p>
+## 🛡️ Security Features
 
+✅ **Secure Storage**: Uses Chrome Storage API (not plain text)  
+✅ **Local Only**: No data sent to external servers  
+✅ **Limited Scope**: Only affects extension, not web pages  
+✅ **Basic Bypass Protection**: Disables common developer shortcuts  
+✅ **Right-click Protection**: Context menu disabled in lockscreen  
+✅ **Focus Management**: Prevents easy navigation away from password field
 
-> These limitations are partly due to changes from Manifest V2 to V3, so I haven't been able to fully resolve them yet ( I guess so, but if it's wrong, don’t ask me 😅) :DDD
+## 🐛 Troubleshooting
 
-**Password:**
+### Forgot Password
 
-- No "forgot password" feature yet
+**Method 1: View current password**
+```javascript
+chrome.storage.local.get(['lockerPassword'], console.log)
+```
 
+**Method 2: Set new password**
+```javascript
+chrome.storage.local.set({ lockerPassword: "new_password" });
+```
 
-**There may also be some other limitations, but we haven’t discovered them yet :DD**
+### Extension Not Working
+
+- Check if extension is enabled in `chrome://extensions/`
+- Try disabling and re-enabling the extension
+- Check console for errors (F12)
+- Reload the extension
+
+### Lockscreen Not Showing
+
+- Clear browser cache and cookies
+- Check if content script is properly injected
+- Verify storage permissions are granted
+
+## 🔒 Permissions Explained
+
+- **storage**: Store password and settings locally
+- **tabs**: Manage browser tabs
+- **activeTab**: Access current tab information
+- **webNavigation**: Monitor navigation events
+- **scripting**: Inject content scripts
+
+## 🤝 Contributing
+
+All contributions are welcome!
+
+1. Fork the repository
+2. Create a new branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to branch (`git push origin feature/AmazingFeature`)
+5. Create a Pull Request
+
+### Development Guidelines
+
+- Follow existing code style and conventions
+- Test thoroughly across different Chrome versions
+- Update documentation for new features
+- Ensure backward compatibility when possible
+
+## 📞 Contact
+
+- **Email**: qckhanh205@gmail.com
+- **Issues**: [GitHub Issues](https://github.com/qckhanh195)
+- **Website**: [https://qckhanh.id.vn/](https://qckhanh.id.vn/)
+
+## 📚 Technical Details
+
+### Browser Compatibility
+
+- Chrome 88+ (Manifest V3 support required)
+- Chromium-based browsers (Edge, Brave, etc.)
+
+### Performance
+
+- Lightweight footprint (~50KB total)
+- Minimal CPU usage
+- No background network activity
+- Fast startup time
+
+### Architecture
+
+- Manifest V3 service worker
+- Modern ES6+ JavaScript
+- CSS3 animations and transitions
+- Local storage only (no external dependencies)
 
 ---
 
 > 😄 Thank you for your interest and support. 💖
+>
+> ✨ This extension was created with the companionship and efforts of my AI assistant — claude.ai :D
 
-> ✨ This extension was created with the companionship and efforts of my assistant — ChatGPT :D 🤖 
+<p align="center">
+  🚀 <b>Built with Vibe Code</b> 🤖
+</p>

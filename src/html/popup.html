@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../css/popup.css">
+  <title>Chrome Locker</title>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="icon">🔒</div>
+      <h2>Chrome Locker</h2>
+      <div class="status">
+        <span class="status-dot" id="statusDot"></span>
+        <span class="status-text" id="statusText">Browser Status</span>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button id="lockBtn" class="action-btn lock-btn">
+        🔒 Lock Browser
+      </button>
+      
+      <button id="settingsBtn" class="action-btn settings-btn">
+        ⚙️ Settings
+      </button>
+    </div>
+
+    <div id="messageArea"></div>
+
+    <div class="footer">
+      🔐 Chrome Locker Extension v2.0
+    </div>
+  </div>
+
+  <script src="../js/popup.js"></script>
+</body>
+</html>
